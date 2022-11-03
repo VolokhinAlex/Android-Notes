@@ -1,19 +1,14 @@
 package com.example.java.android1.java_android_notes;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +18,6 @@ import com.google.android.material.button.MaterialButton;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class NoteDescriptionFragment extends Fragment {
 
@@ -60,17 +54,16 @@ public class NoteDescriptionFragment extends Fragment {
         if (savedInstanceState != null) {
             mDataNotes = savedInstanceState.getParcelable(ARG_NOTE);
         }
-        initNote(view);
+        if (mDataNotes != null) {
+            initNote(view);
+        }
     }
 
     private void initNote(View view) {
         LinearLayout layout = (LinearLayout) view;
-        TextView noteName = generateTextView(mDataNotes.getNoteName(), 20,
-                0, 0, 0, 0);
-        TextView noteDescription = generateTextView(mDataNotes.getNoteDescription(), 20,
-                0, 0, 0, 25);
-        TextView noteDate = generateTextView(mDataNotes.getNoteDate(), 20,
-                0, 0, 0, 30);
+        TextView noteName = generateTextView(mDataNotes.getNoteName(), 20, View.TEXT_ALIGNMENT_CENTER);
+        TextView noteDescription = generateTextView(mDataNotes.getNoteDescription(), 20, View.TEXT_ALIGNMENT_CENTER);
+        TextView noteDate = generateTextView(mDataNotes.getNoteDate(), 20, View.TEXT_ALIGNMENT_TEXT_START);
         MaterialButton editDate = new MaterialButton(getContext());
         editDate.setText(R.string.button_change_date);
         editDate.setOnClickListener((event) -> {
@@ -82,12 +75,11 @@ public class NoteDescriptionFragment extends Fragment {
         layout.addView(editDate);
     }
 
-    private TextView generateTextView(String text, int textSize, int leftPadding,
-                                      int rightPadding, int bottomPadding, int topPadding) {
+    private TextView generateTextView(String text, int textSize, int textAlignment) {
         TextView view = new TextView(getContext());
         view.setText(text);
         view.setTextSize(textSize);
-        view.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
+        view.setTextAlignment(textAlignment);
         return view;
     }
 
@@ -135,4 +127,5 @@ public class NoteDescriptionFragment extends Fragment {
                     isEnableDatePicker = false;
                 });
     }
+
 }
