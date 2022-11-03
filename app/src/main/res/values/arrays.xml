@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="notes_name_list">
+        <item>Test1</item>
+        <item>Test2</item>
+        <item>Test3</item>
+        <item>Test4</item>
+    </string-array>
+
+    <string-array name="notes_description_list">
+        <item>Новая заметка 1</item>
+        <item>Новая заметка 2</item>
+        <item>Новая заметка 3</item>
+        <item>Новая заметка 4</item>
+    </string-array>
+
+    <string-array name="notes_date_list">
+        <item>01.11.2022</item>
+        <item>02.11.2022</item>
+        <item>03.11.2022</item>
+        <item>04.11.2022</item>
+    </string-array>
+</resources>
