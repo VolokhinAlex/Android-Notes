@@ -20,7 +20,7 @@ public class NoteDescriptionActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             NoteDescriptionFragment fragment = new NoteDescriptionFragment();
             fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().
+            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).
                     replace(R.id.note_description, fragment).commit();
         }
     }

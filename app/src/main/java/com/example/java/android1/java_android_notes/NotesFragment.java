@@ -90,6 +90,7 @@ public class NotesFragment extends Fragment {
         NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.replace(R.id.note_description, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
