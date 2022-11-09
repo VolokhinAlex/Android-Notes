@@ -15,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NotesFragment extends Fragment {
 
@@ -37,12 +40,15 @@ public class NotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initNotes(view);
+        addNote(view);
         if (savedInstanceState != null) {
             mCurrentNote = savedInstanceState.getParcelable(KEY_NOTE_POSITION);
         }
         mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandScape) {
             showNoteOnLandOrientation(mCurrentNote);
+        } else {
+            popToBackStack();
         }
     }
 
@@ -53,7 +59,7 @@ public class NotesFragment extends Fragment {
     }
 
     private void initNotes(View view) {
-        LinearLayout layout = (LinearLayout) view;
+        LinearLayout layout = view.findViewById(R.id.notes_list_container);
         String[] notesName = getResources().getStringArray(R.array.notes_name_list);
         String[] notesDescription = getResources().getStringArray(R.array.notes_description_list);
         String[] notesDate = getResources().getStringArray(R.array.notes_date_list);
@@ -80,19 +86,33 @@ public class NotesFragment extends Fragment {
     }
 
     private void showNoteOnPortraitOrientation(DataNotes currentNote) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), NoteDescriptionActivity.class);
-        intent.putExtra(NoteDescriptionFragment.ARG_NOTE, currentNote);
-        startActivity(intent);
+        NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(currentNote);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setReorderingAllowed(true).replace(R.id.notes_list, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+    }
+
+    private void popToBackStack() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.popBackStack();
     }
 
     private void showNoteOnLandOrientation(DataNotes currentNote) {
         NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.popBackStack();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setReorderingAllowed(true);
-        fragmentTransaction.replace(R.id.note_description, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
+        fragmentTransaction.setReorderingAllowed(true).replace(R.id.note_description, fragment).
+                addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).
+                commit();
+    }
+
+    private void addNote(View view) {
+        FloatingActionButton actionButton = view.findViewById(R.id.add_new_note);
+        actionButton.setOnClickListener((click) -> {
+            Toast.makeText(getContext(), "Add New Note", Toast.LENGTH_SHORT).show();
+        });
     }
 }
