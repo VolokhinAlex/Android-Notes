@@ -14,4 +14,6 @@
     <string name="turn_on_dark_theme">Turn on dark theme</string>
     <string name="turn_on_system_theme">Turn on system theme</string>
     <string name="set_text_size_settings">Text Size</string>
+    <string name="remove_note_context_menu">Remove Note</string>
+    <string name="add_to_favorite_context_menu">Add to Favorite</string>
 </resources>

@@ -7,7 +7,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
@@ -18,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
+                addFragment(new SettingsFragment());
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.about_app:
@@ -119,6 +124,33 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        int countFragments = fragments.size();
+        for (int i = countFragments - 1; i >= 0; i--) {
+            Fragment fragment = fragments.get(i);
+            if (fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
+
+    private void addFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragmentToRemove = getVisibleFragment(fragmentManager);
+        if (fragmentToRemove != null) {
+            fragmentTransaction.remove(fragmentToRemove);
+        }
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            fragmentTransaction.replace(R.id.notes_list, fragment).
+                    setReorderingAllowed(true).addToBackStack(null).commit();
+        } else {
+            fragmentTransaction.replace(R.id.note_description, fragment).
+                    setReorderingAllowed(true).addToBackStack(null).commit();
+        }
     }
 
 }

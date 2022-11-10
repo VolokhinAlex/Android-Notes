@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -67,14 +70,32 @@ public class NotesFragment extends Fragment {
             final int index = i;
             TextView note = new TextView(getContext());
             note.setText(notesName[i]);
-            note.setTextSize(18);
+            note.setTextSize(30);
             layout.addView(note);
             note.setOnClickListener((v) -> {
                 mCurrentNote = new DataNotes(index, notesName[index], notesDescription[index],
                         notesDate[index]);
                 chooseOrientation(mCurrentNote);
             });
+            registerForContextMenu(note);
+            note.setOnCreateContextMenuListener((contextMenu, view1, contextMenuInfo) -> {
+                MenuInflater inflater = getActivity().getMenuInflater();
+                inflater.inflate(R.menu.context_menu, contextMenu);
+            });
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_remove_note:
+                Toast.makeText(getContext(), "Removed Note", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_favorite_note:
+                Toast.makeText(getContext(), "Added Favorite Note", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void chooseOrientation(DataNotes currentNote) {
