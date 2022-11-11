@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/edit_note_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:labelFor="@+id/edit_note_title" />
+
+        <EditText
+            android:id="@+id/edit_note_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:labelFor="@+id/edit_note_text" />
+
+        <TextView
+            android:id="@+id/edit_note_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/note_text_size" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/changeDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_change_date" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

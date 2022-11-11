@@ -5,6 +5,14 @@
         <item>Test2</item>
         <item>Test3</item>
         <item>Test4</item>
+        <item>Test5</item>
+        <item>Test6</item>
+        <item>Test7</item>
+        <item>Test8</item>
+        <item>Test9</item>
+        <item>Test10</item>
+        <item>Test11</item>
+        <item>Test12</item>
     </string-array>
 
     <string-array name="notes_description_list">
@@ -12,6 +20,14 @@
         <item>Новая заметка 2</item>
         <item>Новая заметка 3</item>
         <item>Новая заметка 4</item>
+        <item>Новая заметка 5</item>
+        <item>Новая заметка 6</item>
+        <item>Новая заметка 7</item>
+        <item>Новая заметка 8</item>
+        <item>Новая заметка 9</item>
+        <item>Новая заметка 10</item>
+        <item>Новая заметка 11</item>
+        <item>Новая заметка 12</item>
     </string-array>
 
     <string-array name="notes_date_list">
@@ -19,6 +35,14 @@
         <item>02.11.2022</item>
         <item>03.11.2022</item>
         <item>04.11.2022</item>
+        <item>05.11.2022</item>
+        <item>06.11.2022</item>
+        <item>07.11.2022</item>
+        <item>08.11.2022</item>
+        <item>09.11.2022</item>
+        <item>10.11.2022</item>
+        <item>11.11.2022</item>
+        <item>12.11.2022</item>
     </string-array>
 
     -

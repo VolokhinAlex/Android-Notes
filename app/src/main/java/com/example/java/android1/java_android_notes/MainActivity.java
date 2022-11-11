@@ -36,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.popBackStack();
         }
 
-        if (savedInstanceState == null) {
-            NoteDescriptionFragment fragment = new NoteDescriptionFragment();
-            fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
-                    .replace(R.id.note_description, fragment).commit();
-        }
         initView();
     }
 
@@ -126,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
+    public static Fragment getVisibleFragment(FragmentManager fragmentManager) {
         List<Fragment> fragments = fragmentManager.getFragments();
         int countFragments = fragments.size();
         for (int i = countFragments - 1; i >= 0; i--) {

@@ -1,6 +1,5 @@
 package com.example.java.android1.java_android_notes;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -9,6 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -16,19 +19,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.java.android1.java_android_notes.ui.NotesAdapter;
+import com.example.java.android1.java_android_notes.ui.ViewHolder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NotesFragment extends Fragment {
 
     public static final String KEY_NOTE_POSITION = "NotesFragment.notesPosition";
 
-    private DataNotes mCurrentNote;
+    private DataNote mCurrentNote;
     private boolean mIsLandScape;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,6 @@ public class NotesFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initNotes(view);
         addNote(view);
         if (savedInstanceState != null) {
             mCurrentNote = savedInstanceState.getParcelable(KEY_NOTE_POSITION);
@@ -58,31 +60,30 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes, container, false);
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_notes, container, false);
+        initNotes(viewGroup, inflater);
+        return viewGroup;
     }
 
-    private void initNotes(View view) {
-        LinearLayout layout = view.findViewById(R.id.notes_list_container);
-        String[] notesName = getResources().getStringArray(R.array.notes_name_list);
-        String[] notesDescription = getResources().getStringArray(R.array.notes_description_list);
-        String[] notesDate = getResources().getStringArray(R.array.notes_date_list);
-        for (int i = 0; i < notesName.length; i++) {
-            final int index = i;
-            TextView note = new TextView(getContext());
-            note.setText(notesName[i]);
-            note.setTextSize(30);
-            layout.addView(note);
-            note.setOnClickListener((v) -> {
-                mCurrentNote = new DataNotes(index, notesName[index], notesDescription[index],
-                        notesDate[index]);
-                chooseOrientation(mCurrentNote);
-            });
-            registerForContextMenu(note);
-            note.setOnCreateContextMenuListener((contextMenu, view1, contextMenuInfo) -> {
-                MenuInflater inflater = getActivity().getMenuInflater();
-                inflater.inflate(R.menu.context_menu, contextMenu);
-            });
-        }
+    private void initNotes(ViewGroup view, LayoutInflater inflater) {
+        RecyclerView recyclerView = view.findViewById(R.id.notes_list_container);
+        recyclerView.setHasFixedSize(true);
+        DataNoteSourceImpl dataNoteSource = new DataNoteSourceImpl(getResources());
+        NotesAdapter notesAdapter = new NotesAdapter(inflater, dataNoteSource);
+        DividerItemDecoration decoration = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.separator));
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.setAdapter(notesAdapter);
+        notesAdapter.setOnItemClickListener((click, position) -> {
+            mCurrentNote = dataNoteSource.getItem(position);
+            chooseOrientation(mCurrentNote);
+        });
+        notesAdapter.setOnItemCreateContextMenuListener((ContextMenu contextMenu, View view1, ContextMenu.ContextMenuInfo contextMenuInfo) -> {
+            MenuInflater inflater1 = getActivity().getMenuInflater();
+            inflater1.inflate(R.menu.context_menu, contextMenu);
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class NotesFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
-    private void chooseOrientation(DataNotes currentNote) {
+    private void chooseOrientation(DataNote currentNote) {
         if (mIsLandScape) {
             showNoteOnLandOrientation(currentNote);
         } else {
@@ -106,7 +107,7 @@ public class NotesFragment extends Fragment {
         }
     }
 
-    private void showNoteOnPortraitOrientation(DataNotes currentNote) {
+    private void showNoteOnPortraitOrientation(DataNote currentNote) {
         NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -120,7 +121,7 @@ public class NotesFragment extends Fragment {
         fragmentManager.popBackStack();
     }
 
-    private void showNoteOnLandOrientation(DataNotes currentNote) {
+    private void showNoteOnLandOrientation(DataNote currentNote) {
         NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(currentNote);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();

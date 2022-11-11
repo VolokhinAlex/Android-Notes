@@ -3,38 +3,36 @@ package com.example.java.android1.java_android_notes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
-public class DataNotes implements Parcelable {
+public class DataNote implements Parcelable {
 
     private String mNoteName;
     private String mNoteDescription;
     private String mNoteDate;
     private int mCurrentPosition;
 
-    public DataNotes(int mCurrentPosition, String mNoteName, String mNoteDescription, String mNoteDate) {
+    public DataNote(int mCurrentPosition, String mNoteName, String mNoteDescription, String mNoteDate) {
         this.mCurrentPosition = mCurrentPosition;
         this.mNoteName = mNoteName;
         this.mNoteDescription = mNoteDescription;
         this.mNoteDate = mNoteDate;
     }
 
-    protected DataNotes(Parcel in) {
+    protected DataNote(Parcel in) {
         mNoteName = in.readString();
         mNoteDescription = in.readString();
         mNoteDate = in.readString();
         mCurrentPosition = in.readInt();
     }
 
-    public static final Creator<DataNotes> CREATOR = new Creator<DataNotes>() {
+    public static final Creator<DataNote> CREATOR = new Creator<DataNote>() {
         @Override
-        public DataNotes createFromParcel(Parcel in) {
-            return new DataNotes(in);
+        public DataNote createFromParcel(Parcel in) {
+            return new DataNote(in);
         }
 
         @Override
-        public DataNotes[] newArray(int size) {
-            return new DataNotes[size];
+        public DataNote[] newArray(int size) {
+            return new DataNote[size];
         }
     };
 
