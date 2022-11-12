@@ -17,4 +17,5 @@
     <string name="remove_note_context_menu">Remove Note</string>
     <string name="add_to_favorite_context_menu">Add to Favorite</string>
     <string name="edit_note">Edit Note</string>
+    <string name="note_view_settings">Note View</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.java.android1.java_android_notes;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,8 +88,15 @@ public class ListOfNotesFragment extends Fragment {
                     inflater1.inflate(R.menu.context_menu, contextMenu);
                     mItemIndex = position;
                 });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-        recyclerView.setLayoutManager(layoutManager);
+
+        if (requireActivity().getSharedPreferences(Settings.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE).getInt(Settings.KEY_LAYOUT_VIEW, 1) == Settings.GRID_LAYOUT_VIEW) {
+            GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), 2);
+            recyclerView.setLayoutManager(layoutManager);
+        } else {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+            recyclerView.setLayoutManager(layoutManager);
+        }
     }
 
     @SuppressLint("NonConstantResourceId")

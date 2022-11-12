@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,9 +26,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean mIsDarkTheme;
+    private boolean mIsSystemTheme;
+    private int mTextSize;
+    private int mLayoutView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme();
         setContentView(R.layout.activity_main);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -141,6 +148,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fragmentTransaction.replace(R.id.note_description, fragment).
                     setReorderingAllowed(true).addToBackStack(null).commit();
+        }
+    }
+
+    private void readSetting() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        mIsDarkTheme = sharedPreferences.getBoolean(Settings.KEY_IS_DARK_THEME, false);
+        mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
+        mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
+        mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
+    }
+
+    private void setTheme() {
+        readSetting();
+        if (mIsDarkTheme) {
+           setTheme(R.style.ThemeDark);
         }
     }
 
