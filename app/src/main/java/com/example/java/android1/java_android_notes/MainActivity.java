@@ -23,19 +23,16 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
         }
-
         initView();
     }
 
@@ -92,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 addFragment(new SettingsFragment());
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.about_app:
+            case R.id.action_about_app:
                 Toast.makeText(getApplicationContext(), "ABOUT APP", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_sort:
@@ -139,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.remove(fragmentToRemove);
         }
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            fragmentTransaction.replace(R.id.notes_list, fragment).
+            fragmentTransaction.replace(R.id.list_of_notes, fragment).
                     setReorderingAllowed(true).addToBackStack(null).commit();
         } else {
             fragmentTransaction.replace(R.id.note_description, fragment).

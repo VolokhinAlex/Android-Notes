@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/setting_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings"
@@ -35,7 +36,7 @@
             android:textSize="@dimen/text_size" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/change_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/text_sizes"

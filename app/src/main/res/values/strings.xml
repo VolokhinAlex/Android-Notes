@@ -16,4 +16,5 @@
     <string name="set_text_size_settings">Text Size</string>
     <string name="remove_note_context_menu">Remove Note</string>
     <string name="add_to_favorite_context_menu">Add to Favorite</string>
+    <string name="edit_note">Edit Note</string>
 </resources>

@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +58,6 @@ public class NoteDescriptionFragment extends Fragment {
     }
 
     private void initNote(View view) {
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.note_description);
         TextView noteName = generateTextView(view, R.id.item_title, mDataNote.getNoteName());
         TextView noteDescription = generateTextView(view, R.id.item_text, mDataNote.getNoteDescription());
         TextView noteDate = generateTextView(view, R.id.item_date, mDataNote.getNoteDate());
@@ -81,14 +79,14 @@ public class NoteDescriptionFragment extends Fragment {
         FloatingActionButton actionButton = view.findViewById(R.id.edit_note);
         actionButton.setOnClickListener((click) -> {
             Toast.makeText(getContext(), "Edit Note", Toast.LENGTH_SHORT).show();
-            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragmentToRemove = MainActivity.getVisibleFragment(fragmentManager);
             if (fragmentToRemove != null) {
                 fragmentTransaction.remove(fragmentToRemove);
             }
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                fragmentTransaction.replace(R.id.notes_list, EditNoteFragment.newInstance(mDataNote)).
+                fragmentTransaction.replace(R.id.list_of_notes, EditNoteFragment.newInstance(mDataNote)).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             } else {
                 fragmentTransaction.replace(R.id.note_description, EditNoteFragment.newInstance(mDataNote)).

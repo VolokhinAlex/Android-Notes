@@ -1,6 +1,5 @@
 package com.example.java.android1.java_android_notes.ui;
 
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +47,8 @@ public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
                 mOnItemClickListener.onItemClickListener(view, position);
             }
         });
-        holder.itemView.setOnCreateContextMenuListener((contextMenu, view, contextMenuInfo) -> {
-            mOnItemCreateContextMenuListener.onItemCreateContextMenuListener(contextMenu, view, contextMenuInfo);
-        });
+        holder.itemView.setOnCreateContextMenuListener((contextMenu, view, contextMenuInfo) ->
+                mOnItemCreateContextMenuListener.onItemCreateContextMenuListener(contextMenu, view, contextMenuInfo, position));
         holder.fillCard(dataNote);
     }
 

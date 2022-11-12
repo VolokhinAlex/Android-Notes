@@ -16,8 +16,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.text = itemView.findViewById(R.id.note_item_title);
-        this.data = itemView.findViewById(R.id.note_item_date);
+        this.text = itemView.findViewById(R.id.card_item_title);
+        this.data = itemView.findViewById(R.id.card_item_date);
     }
 
     public void fillCard(DataNote dataNote) {

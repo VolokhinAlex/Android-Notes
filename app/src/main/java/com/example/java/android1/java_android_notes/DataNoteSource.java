@@ -10,4 +10,8 @@ public interface DataNoteSource {
 
     int getDataNoteCount();
 
+    void createItem(String title, String text, String date);
+
+    boolean removeItem(int position);
+
 }

@@ -5,6 +5,6 @@ import android.view.View;
 
 public interface OnItemCreateContextMenuListener {
 
-    void onItemCreateContextMenuListener(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo);
+    void onItemCreateContextMenuListener(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo, int position);
 
 }

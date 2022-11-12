@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DataNoteSourceImpl implements DataNoteSource {
 
-    private LinkedList<DataNote> mDataNotes = new LinkedList<>();
+    private final LinkedList<DataNote> mDataNotes = new LinkedList<>();
 
     public DataNoteSourceImpl(Resources resources) {
         String[] notesName = resources.getStringArray(R.array.notes_name_list);
@@ -32,5 +32,16 @@ public class DataNoteSourceImpl implements DataNoteSource {
     @Override
     public int getDataNoteCount() {
         return mDataNotes.size();
+    }
+
+    @Override
+    public void createItem(String title, String text, String date) {
+        mDataNotes.add(new DataNote(mDataNotes.size(), title, text, date));
+    }
+
+    @Override
+    public boolean removeItem(int position) {
+        mDataNotes.remove(position);
+        return true;
     }
 }

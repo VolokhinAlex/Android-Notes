@@ -1,13 +1,14 @@
 package com.example.java.android1.java_android_notes;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,13 @@ public class EditNoteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.edit_note_container);
+        LinearLayout layout = view.findViewById(R.id.edit_note_container);
         if (savedInstanceState != null) {
             mDataNote = savedInstanceState.getParcelable(NoteDescriptionFragment.ARG_NOTE);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();
+            }
         }
         if (mDataNote != null) {
             EditText noteTitle = view.findViewById(R.id.edit_note_title);
@@ -64,9 +69,7 @@ public class EditNoteFragment extends Fragment {
             noteText.setText(mDataNote.getNoteDescription());
             noteDate.setText(mDataNote.getNoteDate());
             MaterialButton btnEditDate = view.findViewById(R.id.changeDate);
-            btnEditDate.setOnClickListener((event) -> {
-                setDate(noteDate, layout);
-            });
+            btnEditDate.setOnClickListener((event) -> setDate(noteDate, layout));
         }
     }
 
