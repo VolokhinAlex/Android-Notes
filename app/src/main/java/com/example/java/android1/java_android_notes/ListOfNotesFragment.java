@@ -33,7 +33,7 @@ public class ListOfNotesFragment extends Fragment {
     private DataNote mCurrentNote;
     private boolean mIsLandScape;
     private NotesAdapter mNotesAdapter;
-    private DataNoteSourceImpl mDataNoteSource;
+    private DataNoteSource mDataNoteSource;
 
     private int mItemIndex;
 
@@ -99,7 +99,7 @@ public class ListOfNotesFragment extends Fragment {
         }
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -119,7 +119,7 @@ public class ListOfNotesFragment extends Fragment {
         FloatingActionButton actionButton = view.findViewById(R.id.create_note);
         actionButton.setOnClickListener((click) -> {
             Toast.makeText(getContext(), "Add New Note", Toast.LENGTH_SHORT).show();
-            mDataNoteSource.createItem("Check", "Test Created Task", "11.12.22");
+            mDataNoteSource.createItem(new DataNote(mNotesAdapter.getItemCount(), "Check", "Test Created Task", "11.12.22"));
             mNotesAdapter.notifyDataSetChanged();
         });
     }

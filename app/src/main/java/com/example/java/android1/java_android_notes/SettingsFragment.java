@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.Spinner;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.Set;
 
 
 public class SettingsFragment extends Fragment {
@@ -30,11 +28,6 @@ public class SettingsFragment extends Fragment {
     private Spinner mChooseLayoutView;
 
     public SettingsFragment() {
-    }
-
-    public static SettingsFragment newInstance() {
-        SettingsFragment fragment = new SettingsFragment();
-        return fragment;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.java.android1.java_android_notes;
 
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +37,8 @@ public class DataNoteSourceImpl implements DataNoteSource {
     }
 
     @Override
-    public void createItem(String title, String text, String date) {
-        mDataNotes.add(new DataNote(mDataNotes.size(), title, text, date));
+    public void createItem(@NonNull DataNote dataNote) {
+        mDataNotes.add(dataNote);
     }
 
     @Override

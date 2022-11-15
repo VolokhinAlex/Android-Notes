@@ -1,5 +1,8 @@
 package com.example.java.android1.java_android_notes;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 public interface DataNoteSource {
@@ -10,7 +13,7 @@ public interface DataNoteSource {
 
     int getDataNoteCount();
 
-    void createItem(String title, String text, String date);
+    void createItem(@NonNull DataNote dataNote);
 
     boolean removeItem(int position);
 
