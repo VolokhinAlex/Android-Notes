@@ -1,18 +1,34 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.data;
 
 import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
+
+import com.example.java.android1.java_android_notes.R;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DataNoteSourceImpl implements DataNoteSource {
-
+    private static final Object LOCK_KEY = new Object();
+    private static DataNoteSourceImpl sInstance;
     private final LinkedList<DataNote> mDataNotes = new LinkedList<>();
 
-    public DataNoteSourceImpl(Resources resources) {
+    public static DataNoteSourceImpl getInstance(Resources resources) {
+        DataNoteSourceImpl instance = sInstance;
+        if (instance == null) {
+            synchronized (LOCK_KEY) {
+                if (sInstance == null) {
+                    instance = new DataNoteSourceImpl(resources);
+                    sInstance = instance;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private DataNoteSourceImpl(Resources resources) {
         String[] notesName = resources.getStringArray(R.array.notes_name_list);
         String[] notesDescription = resources.getStringArray(R.array.notes_description_list);
         String[] notesDate = resources.getStringArray(R.array.notes_date_list);
@@ -42,8 +58,7 @@ public class DataNoteSourceImpl implements DataNoteSource {
     }
 
     @Override
-    public boolean removeItem(int position) {
+    public void removeItem(int position) {
         mDataNotes.remove(position);
-        return true;
     }
 }

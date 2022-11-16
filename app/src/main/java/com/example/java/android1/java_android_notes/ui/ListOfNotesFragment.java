@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,25 +17,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.java.android1.java_android_notes.ui.NotesAdapter;
+import com.example.java.android1.java_android_notes.R;
+import com.example.java.android1.java_android_notes.Settings;
+import com.example.java.android1.java_android_notes.data.DataNoteSource;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
+import com.example.java.android1.java_android_notes.service.Navigation;
+import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ListOfNotesFragment extends Fragment {
 
     public static final String KEY_NOTE_POSITION = "NotesFragment.notesPosition";
 
-    private DataNote mCurrentNote;
     private boolean mIsLandScape;
     private NotesAdapter mNotesAdapter;
     private DataNoteSource mDataNoteSource;
-
     private int mItemIndex;
+    private RecyclerView mRecyclerView;
+    private int mLastSelectedPosition = -1;
+    private Navigation mNavigation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,97 +52,100 @@ public class ListOfNotesFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_NOTE_POSITION, mCurrentNote);
+        outState.putInt(KEY_NOTE_POSITION, mItemIndex);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        addNote(view);
         if (savedInstanceState != null) {
-            mCurrentNote = savedInstanceState.getParcelable(KEY_NOTE_POSITION);
+            mItemIndex = savedInstanceState.getInt(KEY_NOTE_POSITION, 0);
         }
         mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandScape) {
-            addFragment(mCurrentNote, mIsLandScape);
+            addFragment(NoteDescriptionFragment.newInstance(mItemIndex));
         }
+        addNote(view);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
-        initNotes(viewGroup, inflater);
+        initNotes(viewGroup);
+        mNavigation = new Navigation(getParentFragmentManager());
         return viewGroup;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void initNotes(ViewGroup view, LayoutInflater inflater) {
-        RecyclerView recyclerView = view.findViewById(R.id.list_of_notes_container);
-        recyclerView.setHasFixedSize(true);
-        mDataNoteSource = new DataNoteSourceImpl(getResources());
-        mNotesAdapter = new NotesAdapter(inflater, mDataNoteSource);
+    private void initNotes(ViewGroup view) {
+        mRecyclerView = view.findViewById(R.id.list_of_notes_container);
+        mRecyclerView.setHasFixedSize(true);
+        mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+        mNotesAdapter = new NotesAdapter(this, mDataNoteSource);
         DividerItemDecoration decoration = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getResources().getDrawable(R.drawable.separator));
-        recyclerView.addItemDecoration(decoration);
-        recyclerView.setAdapter(mNotesAdapter);
+        mRecyclerView.addItemDecoration(decoration);
+        mRecyclerView.setAdapter(mNotesAdapter);
         mNotesAdapter.setOnItemClickListener((click, position) -> {
-            mCurrentNote = mDataNoteSource.getItem(position);
-            addFragment(mCurrentNote, mIsLandScape);
+            mItemIndex = position;
+            addFragment(NoteDescriptionFragment.newInstance(mItemIndex));
         });
-        mNotesAdapter.setOnItemCreateContextMenuListener(
-                (ContextMenu contextMenu, View view1, ContextMenu.ContextMenuInfo contextMenuInfo, int position) -> {
-                    MenuInflater inflater1 = requireActivity().getMenuInflater();
-                    inflater1.inflate(R.menu.context_menu, contextMenu);
-                    mItemIndex = position;
-                });
-
         if (requireActivity().getSharedPreferences(Settings.SHARED_PREFERENCE_NAME,
                 Context.MODE_PRIVATE).getInt(Settings.KEY_LAYOUT_VIEW, 1) == Settings.GRID_LAYOUT_VIEW) {
             GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), 2);
-            recyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setLayoutManager(layoutManager);
         } else {
             LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-            recyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setLayoutManager(layoutManager);
         }
     }
 
-    @SuppressLint({"NonConstantResourceId", "NotifyDataSetChanged"})
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
+                                    @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.context_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_remove_note:
-                Toast.makeText(getContext(), "Removed Note", Toast.LENGTH_SHORT).show();
-                mDataNoteSource.removeItem(mItemIndex);
-                mNotesAdapter.notifyDataSetChanged();
-                return true;
-            case R.id.action_favorite_note:
-                Toast.makeText(getContext(), "Added Favorite Note", Toast.LENGTH_SHORT).show();
-                return true;
+        if (item.getItemId() == R.id.action_remove_note) {
+            mDataNoteSource.removeItem(mItemIndex);
+            mNotesAdapter.notifyDataSetChanged();
+        } else if(item.getItemId() == R.id.action_favorite_note) {
+            Toast.makeText(getContext(), "Added Favorite Note", Toast.LENGTH_SHORT).show();
+        } else {
+            return super.onContextItemSelected(item);
         }
-        return super.onContextItemSelected(item);
+        return true;
     }
 
     private void addNote(View view) {
         FloatingActionButton actionButton = view.findViewById(R.id.create_note);
         actionButton.setOnClickListener((click) -> {
-            Toast.makeText(getContext(), "Add New Note", Toast.LENGTH_SHORT).show();
-            mDataNoteSource.createItem(new DataNote(mNotesAdapter.getItemCount(), "Check", "Test Created Task", "11.12.22"));
-            mNotesAdapter.notifyDataSetChanged();
+            int position = mDataNoteSource.getDataNoteCount();
+            addFragment(new AddNoteFragment());
+            mRecyclerView.scrollToPosition(position);
         });
     }
 
-    private void addFragment(DataNote currentNote, boolean isLandScape) {
-        Fragment fragmentToReplace = NoteDescriptionFragment.newInstance(currentNote);
+    private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (!isLandScape) {
-            fragmentTransaction.replace(R.id.list_of_notes, fragmentToReplace)
+        if (!mIsLandScape) {
+            fragmentTransaction.replace(R.id.list_of_notes_container, fragment)
                     .setReorderingAllowed(true).addToBackStack(null).commit();
         } else {
-            fragmentTransaction.replace(R.id.note_description, fragmentToReplace)
+            fragmentTransaction.replace(R.id.note_description_container, fragment)
                     .setReorderingAllowed(true).addToBackStack(null).commit();
         }
     }
 
+    public void setLastSelectedPosition(int lastSelectedPosition) {
+        mLastSelectedPosition = lastSelectedPosition;
+        mItemIndex = mLastSelectedPosition;
+    }
 }

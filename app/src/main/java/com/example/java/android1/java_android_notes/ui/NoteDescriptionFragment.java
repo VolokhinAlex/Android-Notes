@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,11 +10,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.java.android1.java_android_notes.MainActivity;
+import com.example.java.android1.java_android_notes.R;
+import com.example.java.android1.java_android_notes.data.DataNote;
+import com.example.java.android1.java_android_notes.data.DataNoteSource;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteDescriptionFragment extends Fragment {
@@ -22,11 +29,14 @@ public class NoteDescriptionFragment extends Fragment {
     public static final String ARG_NOTE = "NoteDescriptionFragment.note";
 
     private DataNote mDataNote;
+    private DataNoteSource mDataNoteSource;
 
-    public static NoteDescriptionFragment newInstance(DataNote note) {
+    private int mItemIndex = -1;
+
+    public static NoteDescriptionFragment newInstance(int itemIndex) {
         NoteDescriptionFragment fragment = new NoteDescriptionFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_NOTE, note);
+        args.putInt(ARG_NOTE, itemIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,7 +45,7 @@ public class NoteDescriptionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mDataNote = getArguments().getParcelable(ARG_NOTE);
+            mItemIndex = getArguments().getInt(ARG_NOTE);
         }
     }
 
@@ -49,12 +59,32 @@ public class NoteDescriptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mDataNote = savedInstanceState.getParcelable(ARG_NOTE);
+            mItemIndex = savedInstanceState.getInt(ARG_NOTE);
         }
+        setHasOptionsMenu(true);
+        mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+        mDataNote = mDataNoteSource.getItem(mItemIndex);
         if (mDataNote != null) {
             initNote(view);
             editNote(view);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.note_menu_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_remove_note) {
+            mDataNoteSource.removeItem(mItemIndex);
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     private void initNote(View view) {
@@ -72,13 +102,12 @@ public class NoteDescriptionFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(ARG_NOTE, mDataNote);
+        outState.putInt(ARG_NOTE, mItemIndex);
     }
 
     private void editNote(View view) {
         FloatingActionButton actionButton = view.findViewById(R.id.edit_note);
         actionButton.setOnClickListener((click) -> {
-            Toast.makeText(getContext(), "Edit Note", Toast.LENGTH_SHORT).show();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragmentToRemove = MainActivity.getVisibleFragment(fragmentManager);
@@ -86,10 +115,10 @@ public class NoteDescriptionFragment extends Fragment {
                 fragmentTransaction.remove(fragmentToRemove);
             }
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                fragmentTransaction.replace(R.id.list_of_notes, EditNoteFragment.newInstance(mDataNote)).
+                fragmentTransaction.replace(R.id.list_of_notes_container, EditNoteFragment.newInstance(mItemIndex)).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             } else {
-                fragmentTransaction.replace(R.id.note_description, EditNoteFragment.newInstance(mDataNote)).
+                fragmentTransaction.replace(R.id.note_description_container, EditNoteFragment.newInstance(mItemIndex)).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             }
         });

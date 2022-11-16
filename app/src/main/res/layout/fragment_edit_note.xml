@@ -9,21 +9,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_note_title"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:labelFor="@+id/edit_note_title" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/edit_note_text"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_note_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_note_title"
+                android:textSize="@dimen/note_text_size"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:labelFor="@+id/edit_note_text" />
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_note_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_note_text"
+                android:textSize="@dimen/note_text_size"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/edit_note_date"
@@ -33,10 +43,16 @@
             android:textSize="@dimen/note_text_size" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/changeDate"
+            android:id="@+id/btn_change_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_change_date" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_data" />
 
     </LinearLayout>
 

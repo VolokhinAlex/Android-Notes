@@ -26,16 +26,10 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/list_of_notes"
-            android:name="com.example.java.android1.java_android_notes.ListOfNotesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
         <FrameLayout
-            android:id="@+id/note_description"
+            android:id="@+id/list_of_notes_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

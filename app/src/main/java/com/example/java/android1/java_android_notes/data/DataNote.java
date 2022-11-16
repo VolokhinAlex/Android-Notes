@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

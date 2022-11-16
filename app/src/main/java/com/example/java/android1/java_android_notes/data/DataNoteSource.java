@@ -1,7 +1,6 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.data;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.List;
 
@@ -15,6 +14,6 @@ public interface DataNoteSource {
 
     void createItem(@NonNull DataNote dataNote);
 
-    boolean removeItem(int position);
+    void removeItem(int position);
 
 }

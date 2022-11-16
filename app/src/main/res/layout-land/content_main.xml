@@ -27,20 +27,18 @@
         android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/list_of_notes"
-            android:name="com.example.java.android1.java_android_notes.ListOfNotesFragment"
+        <FrameLayout
+            android:id="@+id/list_of_notes_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:layout="@layout/fragment_list_of_notes" />
+            android:layout_weight="1" />
 
         <LinearLayout
-            android:id="@+id/note_description"
+            android:id="@+id/note_description_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="3"/>
+            android:layout_weight="3"
+            android:orientation="vertical" />
 
     </LinearLayout>
 

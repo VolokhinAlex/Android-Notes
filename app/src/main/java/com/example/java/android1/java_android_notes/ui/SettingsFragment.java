@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes;
+package com.example.java.android1.java_android_notes.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.example.java.android1.java_android_notes.R;
+import com.example.java.android1.java_android_notes.Settings;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 
@@ -26,9 +28,6 @@ public class SettingsFragment extends Fragment {
     private SwitchMaterial mTurnOnSystemTheme;
     private Spinner mChooseTextSize;
     private Spinner mChooseLayoutView;
-
-    public SettingsFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -20,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.java.android1.java_android_notes.ui.ListOfNotesFragment;
+import com.example.java.android1.java_android_notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -36,9 +38,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme();
         setContentView(R.layout.activity_main);
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager  = getSupportFragmentManager();
             fragmentManager.popBackStack();
+        }
+
+        if (savedInstanceState == null) {
+            ListOfNotesFragment fragment = new ListOfNotesFragment();
+            fragment.setArguments(getIntent().getExtras());
+            addFragment(fragment, false);
         }
         initView();
     }
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                addFragment(new SettingsFragment());
+                addFragment(new SettingsFragment(), true);
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_about_app:
@@ -135,20 +144,27 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void addFragment(Fragment fragment) {
+    private void addFragment(Fragment fragment, boolean isBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragmentToRemove = getVisibleFragment(fragmentManager);
+
         if (fragmentToRemove != null) {
             fragmentTransaction.remove(fragmentToRemove);
         }
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            fragmentTransaction.replace(R.id.list_of_notes, fragment).
-                    setReorderingAllowed(true).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.list_of_notes_container, fragment).
+                    setReorderingAllowed(true);
         } else {
-            fragmentTransaction.replace(R.id.note_description, fragment).
-                    setReorderingAllowed(true).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.note_description_container, fragment).
+                    setReorderingAllowed(true);
         }
+
+        if (isBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
     }
 
     private void readSetting() {
