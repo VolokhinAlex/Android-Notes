@@ -39,7 +39,7 @@ public class ListOfNotesFragment extends Fragment {
     private boolean mIsLandScape;
     private NotesAdapter mNotesAdapter;
     private DataNoteSource mDataNoteSource;
-    private int mItemIndex;
+    private int mItemIndex = -1;
     private RecyclerView mRecyclerView;
     private int mLastSelectedPosition = -1;
     private Navigation mNavigation;
@@ -58,7 +58,7 @@ public class ListOfNotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mItemIndex = savedInstanceState.getInt(KEY_NOTE_POSITION, 0);
+            mItemIndex = savedInstanceState.getInt(KEY_NOTE_POSITION, -1);
         }
         mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandScape) {
@@ -127,6 +127,7 @@ public class ListOfNotesFragment extends Fragment {
         actionButton.setOnClickListener((click) -> {
             int position = mDataNoteSource.getDataNoteCount();
             addFragment(new AddNoteFragment());
+            mNotesAdapter.notifyItemInserted(position);
             mRecyclerView.scrollToPosition(position);
         });
     }

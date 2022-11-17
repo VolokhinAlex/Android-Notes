@@ -29,16 +29,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private boolean mIsDarkTheme;
-    private boolean mIsSystemTheme;
-    private int mTextSize;
-    private int mLayoutView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme();
         setContentView(R.layout.activity_main);
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             FragmentManager fragmentManager  = getSupportFragmentManager();
             fragmentManager.popBackStack();
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             ListOfNotesFragment fragment = new ListOfNotesFragment();
             fragment.setArguments(getIntent().getExtras());
-            addFragment(fragment, false);
+            addFragment(fragment, false, true);
         }
         initView();
     }
@@ -102,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                addFragment(new SettingsFragment(), true);
+                addFragment(new SettingsFragment(), true, false);
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_about_app:
@@ -144,16 +140,14 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void addFragment(Fragment fragment, boolean isBackStack) {
+    private void addFragment(Fragment fragment, boolean isBackStack, boolean isFirstStart) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragmentToRemove = getVisibleFragment(fragmentManager);
 
-        if (fragmentToRemove != null) {
-            fragmentTransaction.remove(fragmentToRemove);
-        }
+        boolean isPortraitOrientation =
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (isPortraitOrientation || isFirstStart) {
             fragmentTransaction.replace(R.id.list_of_notes_container, fragment).
                     setReorderingAllowed(true);
         } else {
@@ -164,15 +158,16 @@ public class MainActivity extends AppCompatActivity {
         if (isBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
+
         fragmentTransaction.commit();
     }
 
     private void readSetting() {
         SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
         mIsDarkTheme = sharedPreferences.getBoolean(Settings.KEY_IS_DARK_THEME, false);
-        mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
-        mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
-        mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
+        boolean mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
+        int mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
+        int mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
     }
 
     private void setTheme() {

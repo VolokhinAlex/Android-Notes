@@ -45,7 +45,7 @@ public class NoteDescriptionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mItemIndex = getArguments().getInt(ARG_NOTE);
+            mItemIndex = getArguments().getInt(ARG_NOTE, -1);
         }
     }
 
@@ -59,10 +59,14 @@ public class NoteDescriptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mItemIndex = savedInstanceState.getInt(ARG_NOTE);
+            mItemIndex = savedInstanceState.getInt(ARG_NOTE, -1);
         }
         setHasOptionsMenu(true);
         mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+        if (mItemIndex == -1) {
+            requireActivity().getSupportFragmentManager().popBackStack();
+            return;
+        }
         mDataNote = mDataNoteSource.getItem(mItemIndex);
         if (mDataNote != null) {
             initNote(view);
