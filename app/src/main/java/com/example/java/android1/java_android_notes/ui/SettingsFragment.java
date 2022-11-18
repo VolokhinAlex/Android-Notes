@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.Settings;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 
@@ -28,6 +30,7 @@ public class SettingsFragment extends Fragment {
     private SwitchMaterial mTurnOnSystemTheme;
     private Spinner mChooseTextSize;
     private Spinner mChooseLayoutView;
+    private MaterialButton mBtnSaveSettings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class SettingsFragment extends Fragment {
         changeThemeToSystem();
         chooseTextSize();
         chooseLayoutView();
+        saveSettings();
     }
 
     private void changeThemeToDark() {
@@ -56,18 +60,16 @@ public class SettingsFragment extends Fragment {
                 Settings.isDarkTheme = isTurnOn;
                 Settings.isSystemTheme = false;
                 mTurnOnSystemTheme.setChecked(false);
-                writeSettings();
-                recreateApp();
             }
         });
     }
 
     private void recreateApp() {
         if (Build.VERSION.SDK_INT <= 30) {
-            getActivity().recreate();
+            requireActivity().recreate();
         } else {
-            Intent intent = getActivity().getIntent();
-            getActivity().finish();
+            Intent intent = requireActivity().getIntent();
+            requireActivity().finish();
             startActivity(intent);
         }
     }
@@ -78,8 +80,6 @@ public class SettingsFragment extends Fragment {
                 Settings.isDarkTheme = false;
                 mTurnOnDarkTheme.setChecked(false);
                 Settings.isSystemTheme = isTurnOn;
-                writeSettings();
-                recreateApp();
             }
         });
     }
@@ -101,12 +101,10 @@ public class SettingsFragment extends Fragment {
                         Settings.textSize = Settings.LARGE_TEXT_SIZE;
                         break;
                 }
-                writeSettings();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
@@ -125,13 +123,20 @@ public class SettingsFragment extends Fragment {
                         Settings.layoutView = Settings.LINEAR_LAYOUT_VIEW;
                         break;
                 }
-                writeSettings();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+        });
+    }
+
+    private void saveSettings() {
+        mBtnSaveSettings.setOnClickListener((view) -> {
+            writeSettings();
+            recreateApp();
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
     }
 
@@ -145,6 +150,7 @@ public class SettingsFragment extends Fragment {
         mChooseTextSize.setSelection(Settings.textSizeIdx);
         mChooseLayoutView = view.findViewById(R.id.change_view);
         mChooseLayoutView.setSelection(Settings.layoutViewIdx);
+        mBtnSaveSettings = view.findViewById(R.id.btn_save_settings);
     }
 
     private void recoverData() {

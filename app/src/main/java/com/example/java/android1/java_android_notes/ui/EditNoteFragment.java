@@ -2,7 +2,6 @@ package com.example.java.android1.java_android_notes.ui;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -14,14 +13,13 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -39,6 +37,8 @@ public class EditNoteFragment extends Fragment {
     private TextInputEditText mEditText;
     private TextView mTvDate;
     private DatePickerDialog mDatePickerDialog;
+    private DataNoteSource mDataNoteSource;
+    private DataNoteSource.DataNoteSourceListener mListener;
 
     public static EditNoteFragment newInstance(int itemIndex) {
         EditNoteFragment fragment = new EditNoteFragment();
@@ -79,8 +79,8 @@ public class EditNoteFragment extends Fragment {
                 fragmentManager.popBackStack();
             }
         }
-        DataNoteSource dataNoteSource = DataNoteSourceImpl.getInstance(getResources());
-        mDataNote = dataNoteSource.getItem(mItemIndex);
+        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
+        mDataNote = mDataNoteSource.getItem(mItemIndex);
         if (mDataNote != null) {
             initView(view);
             onSaveData(view);
@@ -104,7 +104,9 @@ public class EditNoteFragment extends Fragment {
             mDataNote.setNoteName(mEditTitle.getText().toString());
             mDataNote.setNoteDescription(mEditText.getText().toString());
             mDataNote.setNoteDate(mTvDate.getText().toString());
+            mDataNoteSource.updateItem(mDataNote);
             requireActivity().getSupportFragmentManager().popBackStack();
+            mListener.onDataSetChanged();
         });
     }
 
@@ -132,5 +134,9 @@ public class EditNoteFragment extends Fragment {
                 date.get(Calendar.MONTH),
                 date.get(Calendar.DAY_OF_MONTH));
         mDatePickerDialog.show();
+    }
+
+    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
+        this.mListener = listener;
     }
 }

@@ -3,6 +3,7 @@ package com.example.java.android1.java_android_notes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -15,9 +16,11 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.java.android1.java_android_notes.ui.ListOfNotesFragment;
@@ -29,6 +32,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private boolean mIsDarkTheme;
+    private boolean mIsSystemTheme;
+    private int mTextSize;
+    private int mLayoutView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme();
         setContentView(R.layout.activity_main);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            FragmentManager fragmentManager  = getSupportFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
         }
 
@@ -165,16 +171,40 @@ public class MainActivity extends AppCompatActivity {
     private void readSetting() {
         SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
         mIsDarkTheme = sharedPreferences.getBoolean(Settings.KEY_IS_DARK_THEME, false);
-        boolean mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
-        int mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
-        int mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
+        mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
+        mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
+        mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
     }
 
     private void setTheme() {
         readSetting();
         if (mIsDarkTheme) {
-           setTheme(R.style.ThemeDark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+
+        switch (mTextSize) {
+            case Settings.SMALL_TEXT_SIZE:
+                adjustFontScale(getResources().getConfiguration(), 0.7f);
+                break;
+            case Settings.MEDIUM_TEXT_SIZE:
+                adjustFontScale(getResources().getConfiguration(), 1f);
+                break;
+            case Settings.LARGE_TEXT_SIZE:
+                adjustFontScale(getResources().getConfiguration(), 1.5f);
+                break;
+        }
+
+    }
+
+    private void adjustFontScale(Configuration configuration, float scale) {
+        configuration.fontScale = scale;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metrics);
+        metrics.scaledDensity = configuration.fontScale * metrics.density;
+        getBaseContext().getResources().updateConfiguration(configuration, metrics);
     }
 
 }

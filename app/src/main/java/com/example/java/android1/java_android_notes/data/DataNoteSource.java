@@ -6,14 +6,20 @@ import java.util.List;
 
 public interface DataNoteSource {
 
+    interface DataNoteSourceListener {
+        void onItemAdded(int index);
+        void onItemUpdated(int index);
+        void onDataSetChanged();
+    }
+
     List<DataNote> getDataNote();
-
     DataNote getItem(int index);
-
     int getDataNoteCount();
 
     void createItem(@NonNull DataNote dataNote);
-
     void removeItem(int position);
+    void updateItem(@NonNull DataNote dataNote);
 
+    void addChangesListener(DataNoteSourceListener listener);
+    void removeChangesListener(DataNoteSourceListener listener);
 }

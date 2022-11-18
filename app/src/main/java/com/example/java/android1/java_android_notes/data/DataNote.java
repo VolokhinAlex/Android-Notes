@@ -5,13 +5,12 @@ import android.os.Parcelable;
 
 public class DataNote implements Parcelable {
 
+    private String mId;
     private String mNoteName;
     private String mNoteDescription;
     private String mNoteDate;
-    private int mCurrentPosition;
 
-    public DataNote(int mCurrentPosition, String mNoteName, String mNoteDescription, String mNoteDate) {
-        this.mCurrentPosition = mCurrentPosition;
+    public DataNote(String mNoteName, String mNoteDescription, String mNoteDate) {
         this.mNoteName = mNoteName;
         this.mNoteDescription = mNoteDescription;
         this.mNoteDate = mNoteDate;
@@ -21,7 +20,14 @@ public class DataNote implements Parcelable {
         mNoteName = in.readString();
         mNoteDescription = in.readString();
         mNoteDate = in.readString();
-        mCurrentPosition = in.readInt();
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
     }
 
     public static final Creator<DataNote> CREATOR = new Creator<DataNote>() {
@@ -48,10 +54,6 @@ public class DataNote implements Parcelable {
         return mNoteDate;
     }
 
-    public int getCurrentPosition() {
-        return mCurrentPosition;
-    }
-
     public void setNoteName(String mNoteName) {
         this.mNoteName = mNoteName;
     }
@@ -74,6 +76,5 @@ public class DataNote implements Parcelable {
         parcel.writeString(mNoteName);
         parcel.writeString(mNoteDescription);
         parcel.writeString(mNoteDate);
-        parcel.writeInt(mCurrentPosition);
     }
 }

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="5dp">
 
     <TextView
         android:id="@+id/setting_title"
@@ -28,7 +29,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -64,6 +66,14 @@
             android:entries="@array/note_view"
             android:gravity="end"
             tools:ignore="TouchTargetSizeCheck" />
+
     </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_settings"
+        android:layout_marginTop="15dp"/>
 
 </LinearLayout>

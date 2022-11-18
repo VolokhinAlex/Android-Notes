@@ -21,7 +21,7 @@ import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteDescriptionFragment extends Fragment {
@@ -32,6 +32,7 @@ public class NoteDescriptionFragment extends Fragment {
     private DataNoteSource mDataNoteSource;
 
     private int mItemIndex = -1;
+    private DataNoteSource.DataNoteSourceListener mListener;
 
     public static NoteDescriptionFragment newInstance(int itemIndex) {
         NoteDescriptionFragment fragment = new NoteDescriptionFragment();
@@ -62,7 +63,7 @@ public class NoteDescriptionFragment extends Fragment {
             mItemIndex = savedInstanceState.getInt(ARG_NOTE, -1);
         }
         setHasOptionsMenu(true);
-        mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
         if (mItemIndex == -1) {
             requireActivity().getSupportFragmentManager().popBackStack();
             return;
@@ -118,14 +119,20 @@ public class NoteDescriptionFragment extends Fragment {
             if (fragmentToRemove != null) {
                 fragmentTransaction.remove(fragmentToRemove);
             }
+            EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(mItemIndex);
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                fragmentTransaction.replace(R.id.list_of_notes_container, EditNoteFragment.newInstance(mItemIndex)).
+                fragmentTransaction.replace(R.id.list_of_notes_container, editNoteFragment).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             } else {
-                fragmentTransaction.replace(R.id.note_description_container, EditNoteFragment.newInstance(mItemIndex)).
+                fragmentTransaction.replace(R.id.note_description_container, editNoteFragment).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             }
+            editNoteFragment.setOnItemChanges(mListener);
         });
+    }
+
+    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
+        this.mListener = listener;
     }
 
 }

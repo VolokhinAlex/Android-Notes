@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.Settings;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
 import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,7 +42,30 @@ public class ListOfNotesFragment extends Fragment {
     private int mItemIndex = -1;
     private RecyclerView mRecyclerView;
     private int mLastSelectedPosition = -1;
-    private Navigation mNavigation;
+
+    private final DataNoteSource.DataNoteSourceListener mChangeListener = new DataNoteSource.DataNoteSourceListener() {
+        @Override
+        public void onItemAdded(int index) {
+            if (mNotesAdapter != null) {
+                mNotesAdapter.notifyItemInserted(index);
+                mRecyclerView.scrollToPosition(index);
+            }
+         }
+
+        @Override
+        public void onItemUpdated(int index) {
+            if (mNotesAdapter != null) {
+                mNotesAdapter.notifyItemChanged(index);
+            }
+        }
+
+        @Override
+        public void onDataSetChanged() {
+            if (mNotesAdapter != null) {
+                mNotesAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +85,9 @@ public class ListOfNotesFragment extends Fragment {
         }
         mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandScape) {
-            addFragment(NoteDescriptionFragment.newInstance(mItemIndex));
+            NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
+            addFragment(fragment);
+            fragment.setOnItemChanges(mChangeListener);
         }
         addNote(view);
     }
@@ -72,32 +97,29 @@ public class ListOfNotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
         initNotes(viewGroup);
-        mNavigation = new Navigation(getParentFragmentManager());
+        Navigation mNavigation = new Navigation(getParentFragmentManager());
         return viewGroup;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private void initNotes(ViewGroup view) {
         mRecyclerView = view.findViewById(R.id.list_of_notes_container);
         mRecyclerView.setHasFixedSize(true);
-        mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+
+        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
         mNotesAdapter = new NotesAdapter(this, mDataNoteSource);
-        DividerItemDecoration decoration = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
-        decoration.setDrawable(getResources().getDrawable(R.drawable.separator));
-        mRecyclerView.addItemDecoration(decoration);
+        setDecoration();
+        setAnimation(1000);
         mRecyclerView.setAdapter(mNotesAdapter);
+
         mNotesAdapter.setOnItemClickListener((click, position) -> {
             mItemIndex = position;
-            addFragment(NoteDescriptionFragment.newInstance(mItemIndex));
+            NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
+            addFragment(fragment);
+            fragment.setOnItemChanges(mChangeListener);
         });
-        if (requireActivity().getSharedPreferences(Settings.SHARED_PREFERENCE_NAME,
-                Context.MODE_PRIVATE).getInt(Settings.KEY_LAYOUT_VIEW, 1) == Settings.GRID_LAYOUT_VIEW) {
-            GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), 2);
-            mRecyclerView.setLayoutManager(layoutManager);
-        } else {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
-            mRecyclerView.setLayoutManager(layoutManager);
-        }
+
+        setLayoutManager();
+        mDataNoteSource.addChangesListener(mChangeListener);
     }
 
     @Override
@@ -114,7 +136,7 @@ public class ListOfNotesFragment extends Fragment {
         if (item.getItemId() == R.id.action_remove_note) {
             mDataNoteSource.removeItem(mItemIndex);
             mNotesAdapter.notifyDataSetChanged();
-        } else if(item.getItemId() == R.id.action_favorite_note) {
+        } else if (item.getItemId() == R.id.action_favorite_note) {
             Toast.makeText(getContext(), "Added Favorite Note", Toast.LENGTH_SHORT).show();
         } else {
             return super.onContextItemSelected(item);
@@ -126,7 +148,9 @@ public class ListOfNotesFragment extends Fragment {
         FloatingActionButton actionButton = view.findViewById(R.id.create_note);
         actionButton.setOnClickListener((click) -> {
             int position = mDataNoteSource.getDataNoteCount();
-            addFragment(new AddNoteFragment());
+            AddNoteFragment noteFragment = new AddNoteFragment();
+            noteFragment.setOnItemChanges(mChangeListener);
+            addFragment(noteFragment);
             mNotesAdapter.notifyItemInserted(position);
             mRecyclerView.scrollToPosition(position);
         });
@@ -148,5 +172,39 @@ public class ListOfNotesFragment extends Fragment {
     public void setLastSelectedPosition(int lastSelectedPosition) {
         mLastSelectedPosition = lastSelectedPosition;
         mItemIndex = mLastSelectedPosition;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mDataNoteSource.removeChangesListener(mChangeListener);
+    }
+
+    private void setLayoutManager() {
+        boolean isGridLayoutView = requireActivity().getSharedPreferences(Settings.SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE).getInt(Settings.KEY_LAYOUT_VIEW, 1) == Settings.GRID_LAYOUT_VIEW;
+
+        if (isGridLayoutView) {
+            GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), 2);
+            mRecyclerView.setLayoutManager(layoutManager);
+        } else {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity());
+            mRecyclerView.setLayoutManager(layoutManager);
+        }
+
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setDecoration() {
+        DividerItemDecoration decoration = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.separator));
+        mRecyclerView.addItemDecoration(decoration);
+    }
+
+    private void setAnimation(long duration) {
+        DefaultItemAnimator animator = new DefaultItemAnimator();
+        animator.setAddDuration(duration);
+        animator.setRemoveDuration(duration);
+        mRecyclerView.setItemAnimator(animator);
     }
 }
