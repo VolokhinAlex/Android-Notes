@@ -26,5 +26,9 @@
     <string name="save_settings">Save Settings</string>
     <string name="sign_out">Sign Out</string>
     <string name="log_out">Log Out</string>
+    <string name="notes">Notes</string>
+    <string name="description_about_app">The application for write notes</string>
+    <string name="current_app_version">Current Application Version</string>
+    <string name="window_app_settings">Window App Settings</string>
     <integer name="com_vk_sdk_app_id">333</integer>
 </resources>

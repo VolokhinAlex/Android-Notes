@@ -10,4 +10,8 @@
     <dimen name="note_text_size">20sp</dimen>
     <dimen name="nav_header_text_size_email">20sp</dimen>
     <dimen name="image_profile_size">100dp</dimen>
+    <dimen name="app_title_name_size">50sp</dimen>
+    <dimen name="about_app_description_size">20sp</dimen>
+    <dimen name="current_app_version_size">16sp</dimen>
+    <dimen name="margin_bottom_in_about_app">10dp</dimen>
 </resources>

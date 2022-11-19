@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.java.android1.java_android_notes.data.DataAuth;
 import com.example.java.android1.java_android_notes.service.Navigation;
+import com.example.java.android1.java_android_notes.ui.AboutAppFragment;
 import com.example.java.android1.java_android_notes.ui.AuthFragment;
 import com.example.java.android1.java_android_notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -114,10 +115,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 mNavigationToFragment.addFragment(new SettingsFragment(), true,
                         false, false);
-                Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_about_app:
-                Toast.makeText(getApplicationContext(), "ABOUT APP", Toast.LENGTH_SHORT).show();
+                mNavigationToFragment.addFragment(new AboutAppFragment(), true,
+                        false, false);
                 return true;
             case R.id.action_sort:
                 Toast.makeText(getApplicationContext(), "SORTED", Toast.LENGTH_SHORT).show();
