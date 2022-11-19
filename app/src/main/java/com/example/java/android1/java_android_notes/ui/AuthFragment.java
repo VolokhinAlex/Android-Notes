@@ -4,28 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataAuth;
 import com.example.java.android1.java_android_notes.data.DataAuthSource;
 import com.example.java.android1.java_android_notes.data.DataAuthSourceImpl;
+import com.example.java.android1.java_android_notes.service.Navigation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,10 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
 
-import java.util.List;
 
 public class AuthFragment extends Fragment {
 
@@ -52,7 +45,7 @@ public class AuthFragment extends Fragment {
             AuthFragment.this.handleSignInResult(task);
         }
     });
-
+    private DataAuth mDataAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +84,9 @@ public class AuthFragment extends Fragment {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
             mDataAuthSource.createItem(new DataAuth(account.getEmail(), account.getDisplayName(), account.getPhotoUrl()));
-            setData();
+            mDataAuth = mDataAuthSource.getDataAuth().get(0);
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.setDataAuth(mDataAuth);
             disableSign();
         }
     }
@@ -105,7 +100,9 @@ public class AuthFragment extends Fragment {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             mDataAuthSource.createItem(new DataAuth(account.getEmail(), account.getDisplayName(), account.getPhotoUrl()));
-            setData();
+            mDataAuth = mDataAuthSource.getDataAuth().get(0);
+            MainActivity activity = (MainActivity) requireActivity();
+            activity.setDataAuth(mDataAuth);
             disableSign();
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -119,29 +116,23 @@ public class AuthFragment extends Fragment {
 
     private void disableSign() {
         mBtnSignIn.setEnabled(false);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setReorderingAllowed(true).replace(R.id.list_of_notes_container, new ListOfNotesFragment()).commit();
+        Navigation navigation = new Navigation(requireActivity().getSupportFragmentManager(),
+                (MainActivity) requireActivity());
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(this).commit();
+            fragmentManager.beginTransaction().setReorderingAllowed(true).
+                    replace(R.id.list_of_notes_container, new ListOfNotesFragment()).commit();
+        } else {
+            navigation.addFragment(new ListOfNotesFragment(), false, false, false);
+        }
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     public void logOut() {
         mSignInClient.signOut().addOnCompleteListener(task -> enableSign());
-    }
-
-    private void setData() {
-        DataAuth dataAuth = mDataAuthSource.getDataAuth().get(0);
-        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-
-        TextView userName = headerView.findViewById(R.id.user_name);
-        TextView userEmail = headerView.findViewById(R.id.user_email);
-        AppCompatImageView imageView = headerView.findViewById(R.id.image_avatar);
-        if (dataAuth.getImageProfile() != null) {
-            Picasso.get().load(dataAuth.getImageProfile()).into(imageView);
-        }
-        userName.setText(dataAuth.getFullName());
-        userEmail.setText(dataAuth.getEmail());
     }
 
 }

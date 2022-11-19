@@ -4,18 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -24,10 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.Settings;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
+import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -41,6 +40,7 @@ public class ListOfNotesFragment extends Fragment {
     private int mItemIndex = -1;
     private RecyclerView mRecyclerView;
     private int mLastSelectedPosition = -1;
+    private Navigation mNavigation;
 
     private final DataNoteSource.DataNoteSourceListener mChangeListener = new DataNoteSource.DataNoteSourceListener() {
         @Override
@@ -49,7 +49,7 @@ public class ListOfNotesFragment extends Fragment {
                 mNotesAdapter.notifyItemInserted(index);
                 mRecyclerView.scrollToPosition(index);
             }
-         }
+        }
 
         @Override
         public void onItemUpdated(int index) {
@@ -85,7 +85,7 @@ public class ListOfNotesFragment extends Fragment {
         mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandScape) {
             NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
-            addFragment(fragment);
+            mNavigation.addFragment(fragment, true, false, false);
             fragment.setOnItemChanges(mChangeListener);
         }
         addNote(view);
@@ -96,6 +96,8 @@ public class ListOfNotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
         initNotes(viewGroup);
+        mNavigation = new Navigation(requireActivity().getSupportFragmentManager(),
+                (MainActivity) requireActivity());
         return viewGroup;
     }
 
@@ -112,7 +114,7 @@ public class ListOfNotesFragment extends Fragment {
         mNotesAdapter.setOnItemClickListener((click, position) -> {
             mItemIndex = position;
             NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
-            addFragment(fragment);
+            mNavigation.addFragment(fragment, true, false, false);
             fragment.setOnItemChanges(mChangeListener);
         });
 
@@ -148,23 +150,10 @@ public class ListOfNotesFragment extends Fragment {
             int position = mDataNoteSource.getDataNoteCount();
             AddNoteFragment noteFragment = new AddNoteFragment();
             noteFragment.setOnItemChanges(mChangeListener);
-            addFragment(noteFragment);
+            mNavigation.addFragment(noteFragment, true, false, false);
             mNotesAdapter.notifyItemInserted(position);
             mRecyclerView.scrollToPosition(position);
         });
-    }
-
-    private void addFragment(Fragment fragment) {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.popBackStack();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (!mIsLandScape) {
-            fragmentTransaction.replace(R.id.list_of_notes_container, fragment)
-                    .setReorderingAllowed(true).addToBackStack(null).commit();
-        } else {
-            fragmentTransaction.replace(R.id.note_description_container, fragment)
-                    .setReorderingAllowed(true).addToBackStack(null).commit();
-        }
     }
 
     public void setLastSelectedPosition(int lastSelectedPosition) {

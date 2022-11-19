@@ -1,17 +1,5 @@
 package com.example.java.android1.java_android_notes;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,38 +8,56 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.example.java.android1.java_android_notes.data.DataAuth;
+import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.ui.AuthFragment;
 import com.example.java.android1.java_android_notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String KEY_GOOGLE_DATA = "GoogleAuthSaveData";
+
     private boolean mIsDarkTheme;
-    private boolean mIsSystemTheme;
     private int mTextSize;
-    private int mLayoutView;
     public static boolean IS_LOG_OUT = false;
+    private Navigation mNavigationToFragment;
+    private DataAuth mDataAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme();
         setContentView(R.layout.activity_main);
+        mNavigationToFragment = new Navigation(getSupportFragmentManager(), this);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
         }
-
         if (savedInstanceState == null) {
-            //ListOfNotesFragment fragment = new ListOfNotesFragment();
             AuthFragment fragment = new AuthFragment();
             fragment.setArguments(getIntent().getExtras());
-            addFragment(fragment, false, true);
+            mNavigationToFragment.addFragment(fragment, false, false, true);
         }
         initView();
     }
@@ -106,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                addFragment(new SettingsFragment(), true, false);
+                mNavigationToFragment.addFragment(new SettingsFragment(), true,
+                        false, false);
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_about_app:
@@ -116,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "SORTED", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_logout:
-                addFragment(new AuthFragment(), false, false);
+                mNavigationToFragment.addFragment(new AuthFragment(), false, true, false);
                 IS_LOG_OUT = true;
                 return true;
         }
@@ -152,34 +159,12 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void addFragment(Fragment fragment, boolean isBackStack, boolean isFirstStart) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        boolean isPortraitOrientation =
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-
-        if (isPortraitOrientation || isFirstStart) {
-            fragmentTransaction.replace(R.id.list_of_notes_container, fragment).
-                    setReorderingAllowed(true);
-        } else {
-            fragmentTransaction.replace(R.id.note_description_container, fragment).
-                    setReorderingAllowed(true);
-        }
-
-        if (isBackStack) {
-            fragmentTransaction.addToBackStack(null);
-        }
-
-        fragmentTransaction.commit();
-    }
-
     private void readSetting() {
         SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
         mIsDarkTheme = sharedPreferences.getBoolean(Settings.KEY_IS_DARK_THEME, false);
-        mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
+        boolean isSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
         mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
-        mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
+        int layoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
     }
 
     private void setTheme() {
@@ -211,6 +196,40 @@ public class MainActivity extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         metrics.scaledDensity = configuration.fontScale * metrics.density;
         getBaseContext().getResources().updateConfiguration(configuration, metrics);
+    }
+
+    public void setDataAuth(DataAuth dataAuth) {
+        this.mDataAuth = dataAuth;
+        setData();
+    }
+
+    private void setData() {
+        if (mDataAuth != null) {
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView(0);
+
+            TextView userName = headerView.findViewById(R.id.user_name);
+            TextView userEmail = headerView.findViewById(R.id.user_email);
+            AppCompatImageView imageView = headerView.findViewById(R.id.image_avatar);
+            if (mDataAuth.getImageProfile() != null) {
+                Picasso.get().load(mDataAuth.getImageProfile()).into(imageView);
+            }
+            userName.setText(mDataAuth.getFullName());
+            userEmail.setText(mDataAuth.getEmail());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_GOOGLE_DATA, mDataAuth);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mDataAuth = savedInstanceState.getParcelable(KEY_GOOGLE_DATA);
+        setData();
     }
 
 }

@@ -2,13 +2,6 @@ package com.example.java.android1.java_android_notes.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
@@ -113,13 +112,16 @@ public class NoteDescriptionFragment extends Fragment {
     private void editNote(View view) {
         FloatingActionButton actionButton = view.findViewById(R.id.edit_note);
         actionButton.setOnClickListener((click) -> {
+
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragmentToRemove = MainActivity.getVisibleFragment(fragmentManager);
+
             if (fragmentToRemove != null) {
                 fragmentTransaction.remove(fragmentToRemove);
             }
             EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(mItemIndex);
+
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 fragmentTransaction.replace(R.id.list_of_notes_container, editNoteFragment).
                         setReorderingAllowed(true).addToBackStack(null).commit();
@@ -127,6 +129,7 @@ public class NoteDescriptionFragment extends Fragment {
                 fragmentTransaction.replace(R.id.note_description_container, editNoteFragment).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             }
+
             editNoteFragment.setOnItemChanges(mListener);
         });
     }
