@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
-import com.example.java.android1.java_android_notes.listeners.OnItemClickListener;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -47,7 +46,7 @@ public class AddNoteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
+        mDataNoteSource = DataNoteSourceFirebase.getInstance();
         addNewNote();
     }
 

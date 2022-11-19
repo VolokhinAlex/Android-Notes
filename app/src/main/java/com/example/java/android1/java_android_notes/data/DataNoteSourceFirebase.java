@@ -14,22 +14,22 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.LinkedList;
 
-public class DataNoteSourceFirebaseImpl extends BaseDataNoteSource {
+public class DataNoteSourceFirebase extends BaseDataNoteSource {
 
     private static final String COLLECTIONS_NOTES = "android.notes.CollectionsNotes";
     private static final String TAG_DEBUG = "Firebase.Exception";
     private final FirebaseFirestore mFirebase = FirebaseFirestore.getInstance();
     private static final Object LOCK_KEY = new Object();
 
-    private volatile static DataNoteSourceFirebaseImpl sInstance;
+    private volatile static DataNoteSourceFirebase sInstance;
     private CollectionReference mCollections = mFirebase.collection(COLLECTIONS_NOTES);
 
-    public static DataNoteSourceFirebaseImpl getInstance() {
-        DataNoteSourceFirebaseImpl instance = sInstance;
+    public static DataNoteSourceFirebase getInstance() {
+        DataNoteSourceFirebase instance = sInstance;
         if (instance == null) {
             synchronized (LOCK_KEY) {
                 if (sInstance == null) {
-                    instance = new DataNoteSourceFirebaseImpl();
+                    instance = new DataNoteSourceFirebase();
                     sInstance = instance;
                 }
             }
@@ -37,7 +37,7 @@ public class DataNoteSourceFirebaseImpl extends BaseDataNoteSource {
         return instance;
     }
 
-    private DataNoteSourceFirebaseImpl() {
+    private DataNoteSourceFirebase() {
         mCollections.orderBy(DataNoteFromFirebase.FIELD_DATE, Query.Direction.DESCENDING).get().
                 addOnCompleteListener(this::onFetchComplete).
                 addOnFailureListener(this::onFetchFailure);

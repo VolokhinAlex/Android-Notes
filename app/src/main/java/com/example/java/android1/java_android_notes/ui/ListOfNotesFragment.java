@@ -27,8 +27,7 @@ import android.widget.Toast;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.Settings;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
-import com.example.java.android1.java_android_notes.service.Navigation;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -97,7 +96,6 @@ public class ListOfNotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
         initNotes(viewGroup);
-        Navigation mNavigation = new Navigation(getParentFragmentManager());
         return viewGroup;
     }
 
@@ -105,7 +103,7 @@ public class ListOfNotesFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list_of_notes_container);
         mRecyclerView.setHasFixedSize(true);
 
-        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
+        mDataNoteSource = DataNoteSourceFirebase.getInstance();
         mNotesAdapter = new NotesAdapter(this, mDataNoteSource);
         setDecoration();
         setAnimation(1000);
@@ -207,4 +205,5 @@ public class ListOfNotesFragment extends Fragment {
         animator.setRemoveDuration(duration);
         mRecyclerView.setItemAnimator(animator);
     }
+
 }

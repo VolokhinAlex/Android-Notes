@@ -23,7 +23,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.example.java.android1.java_android_notes.ui.ListOfNotesFragment;
+import com.example.java.android1.java_android_notes.ui.AuthFragment;
 import com.example.java.android1.java_android_notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsSystemTheme;
     private int mTextSize;
     private int mLayoutView;
+    public static boolean IS_LOG_OUT = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            ListOfNotesFragment fragment = new ListOfNotesFragment();
+            //ListOfNotesFragment fragment = new ListOfNotesFragment();
+            AuthFragment fragment = new AuthFragment();
             fragment.setArguments(getIntent().getExtras());
             addFragment(fragment, false, true);
         }
@@ -112,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_sort:
                 Toast.makeText(getApplicationContext(), "SORTED", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_logout:
+                addFragment(new AuthFragment(), false, false);
+                IS_LOG_OUT = true;
                 return true;
         }
         return false;
@@ -186,19 +192,19 @@ public class MainActivity extends AppCompatActivity {
 
         switch (mTextSize) {
             case Settings.SMALL_TEXT_SIZE:
-                adjustFontScale(getResources().getConfiguration(), 0.7f);
+                setTextSize(getResources().getConfiguration(), 0.7f);
                 break;
             case Settings.MEDIUM_TEXT_SIZE:
-                adjustFontScale(getResources().getConfiguration(), 1f);
+                setTextSize(getResources().getConfiguration(), 1f);
                 break;
             case Settings.LARGE_TEXT_SIZE:
-                adjustFontScale(getResources().getConfiguration(), 1.5f);
+                setTextSize(getResources().getConfiguration(), 1.5f);
                 break;
         }
 
     }
 
-    private void adjustFontScale(Configuration configuration, float scale) {
+    private void setTextSize(Configuration configuration, float scale) {
         configuration.fontScale = scale;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);

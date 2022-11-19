@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -79,7 +79,7 @@ public class EditNoteFragment extends Fragment {
                 fragmentManager.popBackStack();
             }
         }
-        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
+        mDataNoteSource = DataNoteSourceFirebase.getInstance();
         mDataNote = mDataNoteSource.getItem(mItemIndex);
         if (mDataNote != null) {
             initView(view);

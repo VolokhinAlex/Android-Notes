@@ -21,7 +21,7 @@ import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebaseImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteDescriptionFragment extends Fragment {
@@ -63,7 +63,7 @@ public class NoteDescriptionFragment extends Fragment {
             mItemIndex = savedInstanceState.getInt(ARG_NOTE, -1);
         }
         setHasOptionsMenu(true);
-        mDataNoteSource = DataNoteSourceFirebaseImpl.getInstance();
+        mDataNoteSource = DataNoteSourceFirebase.getInstance();
         if (mItemIndex == -1) {
             requireActivity().getSupportFragmentManager().popBackStack();
             return;

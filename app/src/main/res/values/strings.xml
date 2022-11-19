@@ -24,4 +24,7 @@
     <string name="add_note">Add Note</string>
     <string name="remove_note">Remove Note</string>
     <string name="save_settings">Save Settings</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="log_out">Log Out</string>
+    <integer name="com_vk_sdk_app_id">333</integer>
 </resources>
