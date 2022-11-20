@@ -2,6 +2,7 @@ package com.example.java.android1.java_android_notes.data;
 
 import androidx.annotation.NonNull;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public interface DataNoteSource {
@@ -22,4 +23,7 @@ public interface DataNoteSource {
 
     void addChangesListener(DataNoteSourceListener listener);
     void removeChangesListener(DataNoteSourceListener listener);
+
+    void filterList(LinkedList<DataNote> dataNotes);
+    void recreateList();
 }

@@ -107,5 +107,11 @@ public class DataNoteSourceFirebase extends BaseDataNoteSource {
         return dataFromFirebase;
     }
 
+    @Override
+    public void recreateList() {
+        mCollections.orderBy(DataNoteFromFirebase.FIELD_DATE, Query.Direction.DESCENDING).get().
+                addOnCompleteListener(this::onFetchComplete).
+                addOnFailureListener(this::onFetchFailure);
+    }
 
 }

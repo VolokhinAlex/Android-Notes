@@ -14,7 +14,7 @@
         android:scaleType="centerInside"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_top_from_avatar"
-        app:srcCompat="@drawable/ic_launcher_background"/>
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/user_name"

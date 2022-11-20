@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,11 +26,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.Settings;
+import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.LinkedList;
+import java.util.Locale;
 
 public class ListOfNotesFragment extends Fragment {
 
@@ -77,6 +83,17 @@ public class ListOfNotesFragment extends Fragment {
         outState.putInt(KEY_NOTE_POSITION, mItemIndex);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
+        setHasOptionsMenu(true);
+        initNotes(viewGroup);
+        mNavigation = new Navigation(requireActivity().getSupportFragmentManager(),
+                (MainActivity) requireActivity());
+        return viewGroup;
+    }
+
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
@@ -89,16 +106,6 @@ public class ListOfNotesFragment extends Fragment {
             fragment.setOnItemChanges(mChangeListener);
         }
         addNote(view);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_list_of_notes, container, false);
-        initNotes(viewGroup);
-        mNavigation = new Navigation(requireActivity().getSupportFragmentManager(),
-                (MainActivity) requireActivity());
-        return viewGroup;
     }
 
     private void initNotes(ViewGroup view) {
@@ -142,6 +149,55 @@ public class ListOfNotesFragment extends Fragment {
             return super.onContextItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        searchNote(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_sort) {
+                Toast.makeText(requireActivity().getApplicationContext(), "SORTED", Toast.LENGTH_SHORT).show();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void searchNote(Menu menu) {
+        MenuItem search = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) search.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Если нужно искать сразу после нажатия клавиши.
+                searchFilter(newText);
+                return true;
+            }
+        });
+    }
+
+    private void searchFilter(String text) {
+        LinkedList<DataNote> filterList = new LinkedList<>();
+        for (DataNote note : mDataNoteSource.getDataNote()) {
+            if (note.getNoteName().toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+                filterList.add(note);
+            }
+        }
+        mDataNoteSource.filterList(filterList);
+        if (text.trim().equals("")){
+            mDataNoteSource.recreateList();
+        }
     }
 
     private void addNote(View view) {

@@ -65,4 +65,10 @@ public abstract class BaseDataNoteSource implements DataNoteSource {
             listener.onDataSetChanged();
         }
     }
+
+    public void filterList(LinkedList<DataNote> dataNotes) {
+        mDataNotes.clear();
+        mDataNotes.addAll(dataNotes);
+        notifyDataSetChanged();
+    }
 }
