@@ -8,5 +8,6 @@ public interface DataAuthSource {
 
     List<DataAuth> getDataAuth();
     void createItem(@NonNull DataAuth dataAuth);
+    void clear();
 
 }

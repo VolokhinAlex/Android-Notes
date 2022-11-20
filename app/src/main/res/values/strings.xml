@@ -31,4 +31,8 @@
     <string name="current_app_version">Current Application Version</string>
     <string name="window_app_settings">Window App Settings</string>
     <integer name="com_vk_sdk_app_id">333</integer>
+    <string name="facebook_app_id">547166340557982</string>
+    <string name="fb_login_protocol_scheme">fb547166340557982</string>
+    <string name="facebook_client_token">4d2b544493accc13af4bdd8eeb2707c0</string>
+    <string name="sign_in">Sign In</string>
 </resources>

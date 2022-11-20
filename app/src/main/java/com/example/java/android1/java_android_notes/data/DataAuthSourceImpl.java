@@ -35,4 +35,9 @@ public class DataAuthSourceImpl implements DataAuthSource {
         mDataAuth.add(dataAuth);
     }
 
+    @Override
+    public void clear() {
+        mDataAuth.clear();
+    }
+
 }
