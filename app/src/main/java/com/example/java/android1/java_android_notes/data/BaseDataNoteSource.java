@@ -1,11 +1,17 @@
 package com.example.java.android1.java_android_notes.data;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BaseDataNoteSource implements DataNoteSource {
 
@@ -71,4 +77,23 @@ public abstract class BaseDataNoteSource implements DataNoteSource {
         mDataNotes.addAll(dataNotes);
         notifyDataSetChanged();
     }
+
+    @SuppressLint("SimpleDateFormat")
+    public void sortListByDate() {
+        LinkedList<DataNote> dataNotes = new LinkedList<>(mDataNotes);
+        Collections.sort(dataNotes, (dataNote, t1) -> {
+            DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            try {
+                return Objects.requireNonNull(format.parse(dataNote.getNoteDate())).
+                        compareTo(format.parse(t1.getNoteDate()));
+            } catch (ParseException e) {
+                return 0;
+            }
+        });
+        mDataNotes.clear();
+        mDataNotes.addAll(dataNotes);
+        dataNotes.clear();
+        notifyDataSetChanged();
+    }
+
 }

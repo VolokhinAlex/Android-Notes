@@ -162,7 +162,7 @@ public class ListOfNotesFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_sort) {
-                Toast.makeText(requireActivity().getApplicationContext(), "SORTED", Toast.LENGTH_SHORT).show();
+            mDataNoteSource.sortListByDate();
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -195,7 +195,7 @@ public class ListOfNotesFragment extends Fragment {
             }
         }
         mDataNoteSource.filterList(filterList);
-        if (text.trim().equals("")){
+        if (text.trim().equals("")) {
             mDataNoteSource.recreateList();
         }
     }

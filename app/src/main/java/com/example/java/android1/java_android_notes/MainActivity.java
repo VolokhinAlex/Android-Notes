@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,6 +24,7 @@ import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.ui.AboutAppFragment;
 import com.example.java.android1.java_android_notes.ui.AuthFragment;
 import com.example.java.android1.java_android_notes.ui.SettingsFragment;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
             TextView userName = headerView.findViewById(R.id.user_name);
             TextView userEmail = headerView.findViewById(R.id.user_email);
-            AppCompatImageView imageView = headerView.findViewById(R.id.image_avatar);
+            ShapeableImageView imageView = headerView.findViewById(R.id.image_avatar);
             if (mDataAuth.getImageProfile() != null) {
                 Picasso.get().load(mDataAuth.getImageProfile()).into(imageView);
             }

@@ -26,4 +26,5 @@ public interface DataNoteSource {
 
     void filterList(LinkedList<DataNote> dataNotes);
     void recreateList();
+    void sortListByDate();
 }
