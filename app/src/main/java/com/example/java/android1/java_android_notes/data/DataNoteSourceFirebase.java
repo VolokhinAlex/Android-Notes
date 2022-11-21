@@ -51,6 +51,7 @@ public class DataNoteSourceFirebase extends BaseDataNoteSource {
         mDataNotes.clear();
         mDataNotes.addAll(data);
         data.clear();
+        sortByFavorite();
         notifyDataSetChanged();
     }
 
@@ -86,6 +87,7 @@ public class DataNoteSourceFirebase extends BaseDataNoteSource {
                     note.setNoteName(dataNote.getNoteName());
                     note.setNoteDescription(dataNote.getNoteDescription());
                     note.setNoteDate(dataNote.getNoteDate());
+                    note.setNoteFavorite(dataNote.getNoteFavorite());
                     dataFromFirebase = initCard(dataNote);
                     mCollections.document(id).update(dataFromFirebase.getFields()).
                             addOnFailureListener((exception) -> Log.w(TAG_DEBUG, "Error updating document", exception));
@@ -114,4 +116,22 @@ public class DataNoteSourceFirebase extends BaseDataNoteSource {
                 addOnFailureListener(this::onFetchFailure);
     }
 
+    @Override
+    public void addAndRemoveFavoriteNote(@NonNull DataNote dataNote) {
+        final DataNoteFromFirebase dataFromFirebase;
+        String id = dataNote.getId();
+        if (id != null) {
+            int index = 0;
+            for (DataNote note : mDataNotes) {
+                if (id.equals(note.getId())) {
+                    note.setNoteFavorite(dataNote.getNoteFavorite());
+                    dataFromFirebase = initCard(dataNote);
+                    mCollections.document(id).update(dataFromFirebase.getFields()).
+                            addOnFailureListener((exception) -> Log.w(TAG_DEBUG, "Error updating document", exception));
+                    return;
+                }
+                index++;
+            }
+        }
+    }
 }

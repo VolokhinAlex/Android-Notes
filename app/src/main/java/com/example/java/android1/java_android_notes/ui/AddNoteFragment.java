@@ -61,7 +61,7 @@ public class AddNoteFragment extends Fragment {
         mBtnAddNote.setOnClickListener((view) -> {
             if (!mEditTitle.getText().toString().trim().equals("")) {
                 mDataNoteSource.createItem(new DataNote(mEditTitle.getText().toString(),
-                        mEditText.getText().toString(), format.format(new Date())));
+                        mEditText.getText().toString(), "false", format.format(new Date())));
                 requireActivity().getSupportFragmentManager().popBackStack();
                 mListener.onItemAdded(mDataNoteSource.getDataNoteCount() - 1);
             }

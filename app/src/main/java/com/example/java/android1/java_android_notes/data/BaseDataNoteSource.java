@@ -96,4 +96,15 @@ public abstract class BaseDataNoteSource implements DataNoteSource {
         notifyDataSetChanged();
     }
 
+    public void sortByFavorite() {
+        LinkedList<DataNote> dataNotes = new LinkedList<>(mDataNotes);
+        Collections.sort(dataNotes, (dataNote, dataNote2) ->
+                Boolean.compare(!Boolean.parseBoolean(dataNote.getNoteFavorite()),
+                !Boolean.parseBoolean(dataNote2.getNoteFavorite())));
+        mDataNotes.clear();
+        mDataNotes.addAll(dataNotes);
+        dataNotes.clear();
+        notifyDataSetChanged();
+    }
+
 }

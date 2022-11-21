@@ -46,6 +46,7 @@ public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
             }
         });
         holder.fillCard(mNotesFragment, dataNote);
+        holder.setFavoriteNote(mDataNoteSource, position);
     }
 
     @Override

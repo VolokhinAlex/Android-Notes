@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -143,8 +142,6 @@ public class ListOfNotesFragment extends Fragment {
         if (item.getItemId() == R.id.action_remove_note) {
             mDataNoteSource.removeItem(mItemIndex);
             mNotesAdapter.notifyDataSetChanged();
-        } else if (item.getItemId() == R.id.action_favorite_note) {
-            Toast.makeText(getContext(), "Added Favorite Note", Toast.LENGTH_SHORT).show();
         } else {
             return super.onContextItemSelected(item);
         }

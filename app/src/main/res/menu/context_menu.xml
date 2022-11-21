@@ -6,9 +6,4 @@
         android:orderInCategory="20"
         android:title="@string/remove_note_context_menu" />
 
-    <item
-        android:id="@+id/action_favorite_note"
-        android:orderInCategory="10"
-        android:title="@string/add_to_favorite_context_menu" />
-
 </menu>

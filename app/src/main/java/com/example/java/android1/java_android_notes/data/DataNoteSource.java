@@ -27,4 +27,6 @@ public interface DataNoteSource {
     void filterList(LinkedList<DataNote> dataNotes);
     void recreateList();
     void sortListByDate();
+    void addAndRemoveFavoriteNote(@NonNull DataNote dataNote);
+    void sortByFavorite();
 }

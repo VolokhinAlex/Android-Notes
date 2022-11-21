@@ -9,10 +9,12 @@ public class DataNote implements Parcelable {
     private String mNoteName;
     private String mNoteDescription;
     private String mNoteDate;
+    private String mNoteFavorite;
 
-    public DataNote(String mNoteName, String mNoteDescription, String mNoteDate) {
+    public DataNote(String mNoteName, String mNoteDescription,  String mNoteFavorite, String mNoteDate) {
         this.mNoteName = mNoteName;
         this.mNoteDescription = mNoteDescription;
+        this.mNoteFavorite = mNoteFavorite;
         this.mNoteDate = mNoteDate;
     }
 
@@ -20,6 +22,7 @@ public class DataNote implements Parcelable {
         mNoteName = in.readString();
         mNoteDescription = in.readString();
         mNoteDate = in.readString();
+        mNoteFavorite = in.readString();
     }
 
     public String getId() {
@@ -66,6 +69,14 @@ public class DataNote implements Parcelable {
         this.mNoteDate = mNoteDate;
     }
 
+    public String getNoteFavorite() {
+        return mNoteFavorite;
+    }
+
+    public void setNoteFavorite(String mNoteFavorite) {
+        this.mNoteFavorite = mNoteFavorite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -76,5 +87,7 @@ public class DataNote implements Parcelable {
         parcel.writeString(mNoteName);
         parcel.writeString(mNoteDescription);
         parcel.writeString(mNoteDate);
+        parcel.writeString(mNoteFavorite);
     }
+
 }
