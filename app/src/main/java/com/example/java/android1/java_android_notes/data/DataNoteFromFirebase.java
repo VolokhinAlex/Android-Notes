@@ -12,11 +12,11 @@ public class DataNoteFromFirebase extends DataNote {
     public static final String FIELD_FAVORITE = "favorite";
     public static final String FIELD_DATE = "date";
 
-    public DataNoteFromFirebase(String mNoteName, String mNoteDescription, String mNoteFavorite, String mNoteDate) {
+    public DataNoteFromFirebase(String mNoteName, String mNoteDescription, boolean mNoteFavorite, String mNoteDate) {
         super(mNoteName, mNoteDescription, mNoteFavorite, mNoteDate);
     }
 
-    public DataNoteFromFirebase(String id, String title, String description, String favorite, String date) {
+    public DataNoteFromFirebase(String id, String title, String description, boolean favorite, String date) {
         this(title, description, favorite, date);
         setId(id);
     }
@@ -24,7 +24,7 @@ public class DataNoteFromFirebase extends DataNote {
     public DataNoteFromFirebase(String id, Map<String, Object> fields) {
         this(id, (String) fields.get(FIELD_TITLE),
                 (String) fields.get(FIELD_DESCRIPTION),
-                (String) fields.get(FIELD_FAVORITE),
+                (Boolean) fields.get(FIELD_FAVORITE),
                 (String) fields.get(FIELD_DATE));
     }
 

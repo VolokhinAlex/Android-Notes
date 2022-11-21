@@ -1,5 +1,6 @@
 package com.example.java.android1.java_android_notes.data;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,9 +10,9 @@ public class DataNote implements Parcelable {
     private String mNoteName;
     private String mNoteDescription;
     private String mNoteDate;
-    private String mNoteFavorite;
+    private boolean mNoteFavorite;
 
-    public DataNote(String mNoteName, String mNoteDescription,  String mNoteFavorite, String mNoteDate) {
+    public DataNote(String mNoteName, String mNoteDescription,  boolean mNoteFavorite, String mNoteDate) {
         this.mNoteName = mNoteName;
         this.mNoteDescription = mNoteDescription;
         this.mNoteFavorite = mNoteFavorite;
@@ -22,7 +23,9 @@ public class DataNote implements Parcelable {
         mNoteName = in.readString();
         mNoteDescription = in.readString();
         mNoteDate = in.readString();
-        mNoteFavorite = in.readString();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mNoteFavorite = in.readBoolean();
+        }
     }
 
     public String getId() {
@@ -69,11 +72,11 @@ public class DataNote implements Parcelable {
         this.mNoteDate = mNoteDate;
     }
 
-    public String getNoteFavorite() {
+    public boolean getNoteFavorite() {
         return mNoteFavorite;
     }
 
-    public void setNoteFavorite(String mNoteFavorite) {
+    public void setNoteFavorite(boolean mNoteFavorite) {
         this.mNoteFavorite = mNoteFavorite;
     }
 
@@ -87,7 +90,9 @@ public class DataNote implements Parcelable {
         parcel.writeString(mNoteName);
         parcel.writeString(mNoteDescription);
         parcel.writeString(mNoteDate);
-        parcel.writeString(mNoteFavorite);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            parcel.writeBoolean(mNoteFavorite);
+        }
     }
 
 }
