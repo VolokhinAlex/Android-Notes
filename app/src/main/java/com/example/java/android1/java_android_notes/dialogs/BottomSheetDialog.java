@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes.service;
+package com.example.java.android1.java_android_notes.dialogs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,18 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
-import com.example.java.android1.java_android_notes.ui.EditNoteFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String KEY_CURRENT_INDEX = "BottomSheetDialog.index";
+    private static final String KEY_BOTTOM_SHEET_DIALOG_EDIT_NOTE = "ListOfNotesFragment.BottomSheetDialog.EditNote";
+    private static final String KEY_DIALOG_CONFIRM_DELETE = "ListOfNotesFragment.Dialog.ConfirmDelete";
     private int mIndex;
     private DataNoteSource mDataNoteSource;
 
@@ -52,13 +52,12 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         tvDateNote.setText(dataNote.getNoteDate());
 
         btnEditData.setOnClickListener((viewClick) -> {
-            Navigation navigation = new Navigation(requireActivity().getSupportFragmentManager(), (MainActivity) requireActivity());
-            navigation.addFragment(EditNoteFragment.newInstance(mIndex), true, false, false);
+            new BottomSheetDialogEditFragment(mIndex).show(requireActivity().getSupportFragmentManager(), KEY_BOTTOM_SHEET_DIALOG_EDIT_NOTE);
             dismiss();
         });
 
         btnRemoveData.setOnClickListener((viewClick) -> {
-            new DialogConfirmFragment(mIndex).show(requireActivity().getSupportFragmentManager(), "Confirm Delete Note");
+            new DialogConfirmFragment(mIndex).show(requireActivity().getSupportFragmentManager(), KEY_DIALOG_CONFIRM_DELETE);
             dismiss();
         });
 

@@ -9,6 +9,7 @@ public interface DataNoteSource {
 
     interface DataNoteSourceListener {
         void onItemAdded(int index);
+        void onItemRemoved(int index);
         void onItemUpdated(int index);
         void onDataSetChanged();
     }

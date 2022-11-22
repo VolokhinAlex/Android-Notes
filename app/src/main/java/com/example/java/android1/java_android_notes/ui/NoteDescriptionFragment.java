@@ -62,7 +62,7 @@ public class NoteDescriptionFragment extends Fragment {
         }
         setHasOptionsMenu(true);
         mDataNoteSource = DataNoteSourceFirebase.getInstance();
-        if (mItemIndex == -1) {
+        if (mItemIndex == -1 || mItemIndex >= mDataNoteSource.getDataNoteCount()) {
             requireActivity().getSupportFragmentManager().popBackStack();
             return;
         }

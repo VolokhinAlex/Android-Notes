@@ -67,6 +67,7 @@ public class DataNoteSourceFirebase extends BaseDataNoteSource {
         mCollections.add(dataFromFirebase.getFields()).
                 addOnSuccessListener(documentReference ->
                         dataFromFirebase.setId(documentReference.getId()));
+        notifyAdded(mDataNotes.size() - 1);
     }
 
     @Override
