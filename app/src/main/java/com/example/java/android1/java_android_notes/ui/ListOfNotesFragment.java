@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +27,7 @@ import com.example.java.android1.java_android_notes.Settings;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
+import com.example.java.android1.java_android_notes.service.BottomSheetDialog;
 import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -102,7 +102,6 @@ public class ListOfNotesFragment extends Fragment {
         if (mIsLandScape) {
             NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
             mNavigation.addFragment(fragment, true, false, false);
-            fragment.setOnItemChanges(mChangeListener);
         }
         addNote(view);
     }
@@ -121,31 +120,14 @@ public class ListOfNotesFragment extends Fragment {
             mItemIndex = position;
             NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
             mNavigation.addFragment(fragment, true, false, false);
-            fragment.setOnItemChanges(mChangeListener);
+        });
+
+        mNotesAdapter.setOnItemLongClickListener(position -> {
+            new BottomSheetDialog(position).show(getParentFragmentManager(), "");
         });
 
         setLayoutManager();
         mDataNoteSource.addChangesListener(mChangeListener);
-    }
-
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
-                                    @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater menuInflater = requireActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.context_menu, menu);
-        super.onCreateContextMenu(menu, v, menuInfo);
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_remove_note) {
-            mDataNoteSource.removeItem(mItemIndex);
-            mNotesAdapter.notifyDataSetChanged();
-        } else {
-            return super.onContextItemSelected(item);
-        }
-        return true;
     }
 
     @Override

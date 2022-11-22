@@ -37,7 +37,6 @@ public class EditNoteFragment extends Fragment {
     private TextView mTvDate;
     private DatePickerDialog mDatePickerDialog;
     private DataNoteSource mDataNoteSource;
-    private DataNoteSource.DataNoteSourceListener mListener;
 
     public static EditNoteFragment newInstance(int itemIndex) {
         EditNoteFragment fragment = new EditNoteFragment();
@@ -105,7 +104,6 @@ public class EditNoteFragment extends Fragment {
             mDataNote.setNoteDate(mTvDate.getText().toString());
             mDataNoteSource.updateItem(mDataNote);
             requireActivity().getSupportFragmentManager().popBackStack();
-            mListener.onDataSetChanged();
         });
     }
 
@@ -133,9 +131,5 @@ public class EditNoteFragment extends Fragment {
                 date.get(Calendar.MONTH),
                 date.get(Calendar.DAY_OF_MONTH));
         mDatePickerDialog.show();
-    }
-
-    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
-        this.mListener = listener;
     }
 }

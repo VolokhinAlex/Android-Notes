@@ -35,4 +35,12 @@
     <string name="fb_login_protocol_scheme">fb547166340557982</string>
     <string name="facebook_client_token">4d2b544493accc13af4bdd8eeb2707c0</string>
     <string name="sign_in">Sign In</string>
+    <string name="confirm_dialog_delete">Do you really want to delete this note?</string>
+    <string name="confirm_dialog_title">Delete Note</string>
+    <string name="confirm_delete_no">No</string>
+    <string name="confirm_delete_yes">Yes</string>
+    <string name="label_description">Description:</string>
+    <string name="label_date_of_creating">Date of creating:</string>
+    <string name="label_title">Title:</string>
+    <string name="label_note_to_delete">Note to delete:</string>
 </resources>
