@@ -46,14 +46,10 @@ public class MainActivity extends AppCompatActivity {
         setTheme();
         setContentView(R.layout.activity_main);
         mNavigationToFragment = new Navigation(getSupportFragmentManager(), this);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStack();
-        }
         if (savedInstanceState == null) {
             AuthFragment fragment = new AuthFragment();
             fragment.setArguments(getIntent().getExtras());
-            mNavigationToFragment.addFragment(fragment, false, false, true);
+            mNavigationToFragment.addFragment(fragment, false);
         }
         initView();
     }
@@ -90,16 +86,17 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                mNavigationToFragment.addFragment(new SettingsFragment(), true,
-                        false, false);
+                mNavigationToFragment.addFragment(new SettingsFragment(), true);
                 return true;
             case R.id.action_about_app:
-                mNavigationToFragment.addFragment(new AboutAppFragment(), true,
-                        false, false);
+                mNavigationToFragment.addFragment(new AboutAppFragment(), true);
                 return true;
             case R.id.action_logout:
-                mNavigationToFragment.addFragment(new AuthFragment(), false, true, false);
+                mNavigationToFragment.addFragment(new AuthFragment(), false);
                 IS_LOG_OUT = true;
+                return true;
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
                 return true;
         }
         return false;

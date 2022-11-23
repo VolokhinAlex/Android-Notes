@@ -2,7 +2,6 @@ package com.example.java.android1.java_android_notes.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,7 +41,6 @@ public class ListOfNotesFragment extends Fragment {
     private static final String KEY_BOTTOM_SHEET_DIALOG_NOTE = "ListOfNotesFragment.BottomSheetDialog.AboutNote";
     private static final String KEY_DIALOG_ADD_NOTE = "ListOfNotesFragment.Dialog.AddNote";
 
-    private boolean mIsLandScape;
     private NotesAdapter mNotesAdapter;
     private DataNoteSource mDataNoteSource;
     private int mItemIndex = -1;
@@ -109,11 +107,6 @@ public class ListOfNotesFragment extends Fragment {
         if (savedInstanceState != null) {
             mItemIndex = savedInstanceState.getInt(KEY_NOTE_POSITION, -1);
         }
-        mIsLandScape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        if (mIsLandScape) {
-            NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
-            mNavigation.addFragment(fragment, true, false, false);
-        }
         addNote(view);
     }
 
@@ -130,7 +123,7 @@ public class ListOfNotesFragment extends Fragment {
         mNotesAdapter.setOnItemClickListener((click, position) -> {
             mItemIndex = position;
             NoteDescriptionFragment fragment = NoteDescriptionFragment.newInstance(mItemIndex);
-            mNavigation.addFragment(fragment, true, false, false);
+            mNavigation.addFragment(fragment, true);
         });
 
         mNotesAdapter.setOnItemLongClickListener(position -> new BottomSheetDialog(position).

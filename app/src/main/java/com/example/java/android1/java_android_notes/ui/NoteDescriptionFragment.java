@@ -1,6 +1,5 @@
 package com.example.java.android1.java_android_notes.ui;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,13 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
+import com.example.java.android1.java_android_notes.service.Navigation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteDescriptionFragment extends Fragment {
@@ -111,23 +110,8 @@ public class NoteDescriptionFragment extends Fragment {
     private void editNote(View view) {
         FloatingActionButton actionButton = view.findViewById(R.id.edit_note);
         actionButton.setOnClickListener((click) -> {
-
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragmentToRemove = MainActivity.getVisibleFragment(fragmentManager);
-
-            if (fragmentToRemove != null) {
-                fragmentTransaction.remove(fragmentToRemove);
-            }
-            EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(mItemIndex);
-
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                fragmentTransaction.replace(R.id.list_of_notes_container, editNoteFragment).
-                        setReorderingAllowed(true).addToBackStack(null).commit();
-            } else {
-                fragmentTransaction.replace(R.id.note_description_container, editNoteFragment).
-                        setReorderingAllowed(true).addToBackStack(null).commit();
-            }
+            Navigation navigation = new Navigation(requireActivity().getSupportFragmentManager(), (MainActivity) requireActivity());
+            navigation.addFragment(EditNoteFragment.newInstance(mItemIndex), true);
         });
     }
 

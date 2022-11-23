@@ -2,18 +2,15 @@ package com.example.java.android1.java_android_notes.ui;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
@@ -69,13 +66,8 @@ public class EditNoteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout layout = view.findViewById(R.id.edit_note_container);
         if (savedInstanceState != null) {
             mItemIndex = savedInstanceState.getInt(KEY_ITEM_INDEX);
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
         }
         mDataNoteSource = DataNoteSourceFirebase.getInstance();
         mDataNote = mDataNoteSource.getItem(mItemIndex);
@@ -88,8 +80,8 @@ public class EditNoteFragment extends Fragment {
     }
 
     private void initView(@NonNull View view) {
-        mEditTitle = (TextInputEditText) view.findViewById(R.id.edit_note_title);
-        mEditText = (TextInputEditText) view.findViewById(R.id.edit_note_text);
+        mEditTitle = view.findViewById(R.id.edit_note_title);
+        mEditText = view.findViewById(R.id.edit_note_text);
         mTvDate = view.findViewById(R.id.edit_note_date);
         mEditTitle.setText(mDataNote.getNoteName());
         mEditText.setText(mDataNote.getNoteDescription());

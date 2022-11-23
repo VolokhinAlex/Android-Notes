@@ -3,7 +3,6 @@ package com.example.java.android1.java_android_notes.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
@@ -213,16 +210,7 @@ public class AuthFragment extends Fragment {
         mBtnSignIn.setEnabled(false);
         Navigation navigation = new Navigation(requireActivity().getSupportFragmentManager(),
                 (MainActivity) requireActivity());
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(this).commit();
-            fragmentManager.beginTransaction().setReorderingAllowed(true).
-                    replace(R.id.list_of_notes_container, new ListOfNotesFragment()).commit();
-        } else {
-            navigation.addFragment(new ListOfNotesFragment(), false, false, false);
-        }
+        navigation.addFragment(new ListOfNotesFragment(), false);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
