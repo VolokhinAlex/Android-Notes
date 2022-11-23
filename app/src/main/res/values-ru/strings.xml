@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Заметки</string>
+    <string name="button_change_date">Изменение даты</string>
+    <string name="add_new_note">Добавить новую заметку</string>
+    <string name="search">Поиск</string>
+    <string name="sort">Сортировка по дате</string>
+    <string name="settings">Настройки</string>
+    <string name="about_app">О Приложении</string>
+    <string name="turn_on_dark_theme">Включить темную тему</string>
+    <string name="turn_on_system_theme">Включить системную тему</string>
+    <string name="set_text_size_settings">Размер текста</string>
+    <string name="add_to_favorite_context_menu">Добавить в избранное</string>
+    <string name="edit_note">Редактирование</string>
+    <string name="note_view_settings">Вид макета</string>
+    <string name="save_data">Сохранить данные</string>
+    <string name="hint_note_title">Заголовок</string>
+    <string name="hint_note_text">Описание</string>
+    <string name="remove_note">Удалить заметку</string>
+    <string name="save_settings">Сохранить настройки</string>
+    <string name="sign_out">Выйти из аккаунта</string>
+    <string name="log_out">Выйти из аккаунта</string>
+    <string name="description_about_app">Приложения для заметок</string>
+    <string name="current_app_version">Текущая версия приложения</string>
+    <string name="window_app_settings">Системные настройки приложения</string>
+    <string name="sign_in">Войти в аккаунт</string>
+    <string name="confirm_dialog_delete">Вы действительно хотите удалить эту заметку?</string>
+    <string name="confirm_dialog_title">Удалить заметку</string>
+    <string name="confirm_delete_no">Нет</string>
+    <string name="confirm_delete_yes">Да</string>
+    <string name="label_description">Описание:</string>
+    <string name="label_date_of_creating">Дата создания:</string>
+    <string name="label_title">Заголовок:</string>
+    <string name="label_note_to_delete">Заметка для удаления:</string>
+</resources>
