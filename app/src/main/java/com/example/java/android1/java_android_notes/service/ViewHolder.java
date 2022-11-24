@@ -16,20 +16,23 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView text;
-    public TextView data;
-    public MaterialCheckBox favorite;
+    private final TextView text;
+    private final TextView data;
+    private final TextView description;
+    private final MaterialCheckBox favorite;
 
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
         this.text = itemView.findViewById(R.id.card_item_title);
         this.data = itemView.findViewById(R.id.card_item_date);
+        this.description = itemView.findViewById(R.id.card_item_description);
         this.favorite = itemView.findViewById(R.id.card_item_favorite);
     }
 
     public void fillCard(ListOfNotesFragment fragment, DataNote dataNote, OnItemLongClickListener longClickListener) {
         text.setText(dataNote.getNoteName());
         data.setText(dataNote.getNoteDate());
+        description.setText(dataNote.getNoteDescription());
         favorite.setChecked(dataNote.getNoteFavorite());
         itemView.setOnLongClickListener((view) -> {
             fragment.setLastSelectedPosition(getLayoutPosition());

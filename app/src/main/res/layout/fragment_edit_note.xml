@@ -16,9 +16,10 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_note_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:hint="@string/hint_note_title"
-                android:textSize="@dimen/note_text_size"/>
+                android:textSize="@dimen/note_text_size" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -30,6 +31,7 @@
                 android:id="@+id/edit_note_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:hint="@string/hint_note_text"
                 android:textSize="@dimen/note_text_size"/>
 

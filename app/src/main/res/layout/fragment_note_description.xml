@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,28 +13,35 @@
             android:id="@+id/note_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/note_text_size"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/note_text_size"
-                android:layout_gravity="center" />
+                android:layout_gravity="start"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/title_text_size"
+                android:hint="@string/hint_note_title" />
 
             <TextView
                 android:id="@+id/item_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="10dp"
+                android:textSize="@dimen/note_date_text_size"
+                android:hint="@string/hint_note_date"/>
+
+            <TextView
+                android:id="@+id/item_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:textSize="@dimen/note_text_size"
-                android:layout_gravity="center"/>
+                android:hint="@string/hint_note_text"/>
 
         </LinearLayout>
 
