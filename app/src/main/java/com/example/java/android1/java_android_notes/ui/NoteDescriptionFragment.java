@@ -12,19 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.java.android1.java_android_notes.MainActivity;
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
+import com.example.java.android1.java_android_notes.dialogs.DialogConfirmFragment;
 import com.example.java.android1.java_android_notes.service.Navigation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NoteDescriptionFragment extends Fragment {
 
     public static final String ARG_NOTE = "NoteDescriptionFragment.note";
+    private static final String KEY_DIALOG_CONFIRM_DELETE = "ListOfNotesFragment.Dialog.ConfirmDelete";
 
     private DataNote mDataNote;
     private DataNoteSource mDataNoteSource;
@@ -80,9 +81,7 @@ public class NoteDescriptionFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_remove_note) {
-            mDataNoteSource.removeItem(mItemIndex);
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            fragmentManager.popBackStack();
+            new DialogConfirmFragment(mItemIndex).show(requireActivity().getSupportFragmentManager(), KEY_DIALOG_CONFIRM_DELETE);
         } else {
             return super.onOptionsItemSelected(item);
         }
