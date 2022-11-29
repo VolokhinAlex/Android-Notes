@@ -31,7 +31,6 @@ public class NoteDescriptionFragment extends Fragment {
     private DataNoteSource mDataNoteSource;
 
     private int mItemIndex = -1;
-    private DataNoteSource.DataNoteSourceListener mListener;
 
     public static NoteDescriptionFragment newInstance(int itemIndex) {
         NoteDescriptionFragment fragment = new NoteDescriptionFragment();
@@ -129,13 +128,7 @@ public class NoteDescriptionFragment extends Fragment {
                 fragmentTransaction.replace(R.id.note_description_container, editNoteFragment).
                         setReorderingAllowed(true).addToBackStack(null).commit();
             }
-
-            editNoteFragment.setOnItemChanges(mListener);
         });
-    }
-
-    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
-        this.mListener = listener;
     }
 
 }

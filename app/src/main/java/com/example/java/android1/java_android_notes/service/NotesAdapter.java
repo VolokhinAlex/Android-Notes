@@ -11,6 +11,7 @@ import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.listeners.OnItemClickListener;
+import com.example.java.android1.java_android_notes.listeners.OnItemLongClickListener;
 import com.example.java.android1.java_android_notes.ui.ListOfNotesFragment;
 
 public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -19,6 +20,7 @@ public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
     private final DataNoteSource mDataNoteSource;
     private OnItemClickListener mOnItemClickListener;
     private final ListOfNotesFragment mNotesFragment;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     public NotesAdapter(ListOfNotesFragment notesFragment, DataNoteSource dataNoteSource) {
         this.mNotesFragment = notesFragment;
@@ -28,6 +30,10 @@ public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.mOnItemLongClickListener = onItemLongClickListener;
     }
 
     @NonNull
@@ -45,7 +51,7 @@ public class NotesAdapter extends RecyclerView.Adapter<ViewHolder> {
                 mOnItemClickListener.onItemClickListener(view, position);
             }
         });
-        holder.fillCard(mNotesFragment, dataNote);
+        holder.fillCard(mNotesFragment, dataNote, mOnItemLongClickListener);
         holder.setFavoriteNote(mDataNoteSource, position);
     }
 
