@@ -2,19 +2,18 @@ package com.example.java.android1.java_android_notes.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.java.android1.java_android_notes.R;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
-import com.example.java.android1.java_android_notes.data.DataNoteSourceImpl;
+import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -29,6 +28,7 @@ public class AddNoteFragment extends Fragment {
     private TextInputEditText mEditText;
     private MaterialButton mBtnAddNote;
     private DataNoteSource mDataNoteSource;
+    private DataNoteSource.DataNoteSourceListener mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class AddNoteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        mDataNoteSource = DataNoteSourceImpl.getInstance(getResources());
+        mDataNoteSource = DataNoteSourceFirebase.getInstance();
         addNewNote();
     }
 
@@ -60,11 +60,16 @@ public class AddNoteFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         mBtnAddNote.setOnClickListener((view) -> {
             if (!mEditTitle.getText().toString().trim().equals("")) {
-                mDataNoteSource.createItem(new DataNote(mDataNoteSource.getDataNoteCount() - 1,
-                        mEditTitle.getText().toString(), mEditText.getText().toString(), format.format(new Date())));
+                mDataNoteSource.createItem(new DataNote(mEditTitle.getText().toString(),
+                        mEditText.getText().toString(), false, format.format(new Date())));
                 requireActivity().getSupportFragmentManager().popBackStack();
+                mListener.onItemAdded(mDataNoteSource.getDataNoteCount() - 1);
             }
         });
+    }
+
+    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
+        this.mListener = listener;
     }
 
 }

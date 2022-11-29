@@ -1,19 +1,21 @@
 package com.example.java.android1.java_android_notes.data;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class DataNote implements Parcelable {
 
+    private String mId;
     private String mNoteName;
     private String mNoteDescription;
     private String mNoteDate;
-    private int mCurrentPosition;
+    private boolean mNoteFavorite;
 
-    public DataNote(int mCurrentPosition, String mNoteName, String mNoteDescription, String mNoteDate) {
-        this.mCurrentPosition = mCurrentPosition;
+    public DataNote(String mNoteName, String mNoteDescription,  boolean mNoteFavorite, String mNoteDate) {
         this.mNoteName = mNoteName;
         this.mNoteDescription = mNoteDescription;
+        this.mNoteFavorite = mNoteFavorite;
         this.mNoteDate = mNoteDate;
     }
 
@@ -21,7 +23,17 @@ public class DataNote implements Parcelable {
         mNoteName = in.readString();
         mNoteDescription = in.readString();
         mNoteDate = in.readString();
-        mCurrentPosition = in.readInt();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            mNoteFavorite = in.readBoolean();
+        }
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
     }
 
     public static final Creator<DataNote> CREATOR = new Creator<DataNote>() {
@@ -48,10 +60,6 @@ public class DataNote implements Parcelable {
         return mNoteDate;
     }
 
-    public int getCurrentPosition() {
-        return mCurrentPosition;
-    }
-
     public void setNoteName(String mNoteName) {
         this.mNoteName = mNoteName;
     }
@@ -64,6 +72,14 @@ public class DataNote implements Parcelable {
         this.mNoteDate = mNoteDate;
     }
 
+    public boolean getNoteFavorite() {
+        return mNoteFavorite;
+    }
+
+    public void setNoteFavorite(boolean mNoteFavorite) {
+        this.mNoteFavorite = mNoteFavorite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -74,6 +90,9 @@ public class DataNote implements Parcelable {
         parcel.writeString(mNoteName);
         parcel.writeString(mNoteDescription);
         parcel.writeString(mNoteDate);
-        parcel.writeInt(mCurrentPosition);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            parcel.writeBoolean(mNoteFavorite);
+        }
     }
+
 }
