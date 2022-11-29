@@ -20,6 +20,7 @@
     <string name="save_data">Save Data</string>
     <string name="hint_note_title">Note Title</string>
     <string name="hint_note_text">Note Text</string>
+    <string name="hint_note_date">Note Date</string>
     <string name="remove_note">Remove Note</string>
     <string name="save_settings">Save Settings</string>
     <string name="sign_out">Sign Out</string>

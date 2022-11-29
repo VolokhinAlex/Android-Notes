@@ -20,7 +20,7 @@
             android:id="@+id/add_note_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorOnPrimary"
+            android:background="@android:color/transparent"
             android:textSize="@dimen/note_text_size"
             android:hint="@string/hint_note_title" />
 
@@ -35,7 +35,7 @@
             android:id="@+id/add_note_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorOnPrimary"
+            android:background="@android:color/transparent"
             android:textSize="@dimen/note_text_size"
             android:hint="@string/hint_note_text"/>
 

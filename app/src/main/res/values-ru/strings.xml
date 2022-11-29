@@ -16,6 +16,7 @@
     <string name="save_data">Сохранить данные</string>
     <string name="hint_note_title">Заголовок</string>
     <string name="hint_note_text">Описание</string>
+    <string name="hint_note_date">Дата</string>
     <string name="remove_note">Удалить заметку</string>
     <string name="save_settings">Сохранить настройки</string>
     <string name="sign_out">Выйти из аккаунта</string>
