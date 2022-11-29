@@ -5,8 +5,7 @@
     <dimen name="text_size">18sp</dimen>
     <dimen name="margin_end_floating_btn">20dp</dimen>
     <dimen name="margin_bottom_floating_btn">20dp</dimen>
-    <dimen name="nav_header_height">200dp</dimen>
-    <dimen name="margin_top_from_avatar">10dp</dimen>
+    <dimen name="margin_top_nav_header">10dp</dimen>
     <dimen name="note_text_size">20sp</dimen>
     <dimen name="nav_header_text_size_email">20sp</dimen>
     <dimen name="image_profile_size">100dp</dimen>
@@ -14,4 +13,16 @@
     <dimen name="about_app_description_size">20sp</dimen>
     <dimen name="current_app_version_size">16sp</dimen>
     <dimen name="margin_bottom_in_about_app">10dp</dimen>
+    <dimen name="dialog_title_text_size">30sp</dimen>
+    <dimen name="bottom_dialog_margin">5dp</dimen>
+    <dimen name="bottom_dialog_btn_text_size">18sp</dimen>
+    <dimen name="bottom_dialog_text_size">20sp</dimen>
+    <dimen name="confirm_dialog_text_size">18sp</dimen>
+    <dimen name="confirm_dialog_margin">10dp</dimen>
+    <dimen name="confirm_btn_text_size">20sp</dimen>
+    <dimen name="add_note_margin">10dp</dimen>
+    <dimen name="note_item_margin">10dp</dimen>
+    <dimen name="note_item_title_text_size">21sp</dimen>
+    <dimen name="note_item_date_text_size">18sp</dimen>
+    <dimen name="margin_settings_from_view">15dp</dimen>
 </resources>

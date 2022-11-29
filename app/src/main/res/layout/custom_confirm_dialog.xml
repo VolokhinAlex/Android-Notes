@@ -16,27 +16,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/confirm_dialog_delete"
-        android:layout_margin="10dp"
-        android:textSize="18sp"/>
+        android:layout_margin="@dimen/confirm_dialog_margin"
+        android:textSize="@dimen/confirm_dialog_text_size"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/confirm_dialog_margin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="@string/label_note_to_delete"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/confirm_dialog_text_size"/>
 
         <TextView
             android:id="@+id/confirm_dialog_title_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="18sp"
+            android:layout_marginStart="4dp"
+            android:textSize="@dimen/confirm_dialog_text_size"
             tools:text="Title Note"/>
 
     </LinearLayout>
@@ -46,16 +46,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:layout_margin="10dp">
+        android:layout_margin="@dimen/confirm_dialog_margin">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirm_dialog_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="@dimen/confirm_dialog_margin"
             android:backgroundTint="@android:color/darker_gray"
-            android:textSize="20sp"
+            android:textSize="@dimen/confirm_btn_text_size"
             android:text="@string/confirm_delete_no" />
 
         <com.google.android.material.button.MaterialButton
@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:textSize="@dimen/confirm_btn_text_size"
             android:text="@string/confirm_delete_yes"/>
 
     </LinearLayout>

@@ -28,7 +28,6 @@ public class AddNoteFragment extends Fragment {
     private TextInputEditText mEditText;
     private MaterialButton mBtnAddNote;
     private DataNoteSource mDataNoteSource;
-    private DataNoteSource.DataNoteSourceListener mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,13 +62,8 @@ public class AddNoteFragment extends Fragment {
                 mDataNoteSource.createItem(new DataNote(mEditTitle.getText().toString(),
                         mEditText.getText().toString(), false, format.format(new Date())));
                 requireActivity().getSupportFragmentManager().popBackStack();
-                mListener.onItemAdded(mDataNoteSource.getDataNoteCount() - 1);
             }
         });
-    }
-
-    public void setOnItemChanges(DataNoteSource.DataNoteSourceListener listener) {
-        this.mListener = listener;
     }
 
 }

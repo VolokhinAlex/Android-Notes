@@ -12,7 +12,6 @@
 
     <item
         android:id="@+id/action_sort"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="@string/sort"
         android:orderInCategory="5"/>
 

@@ -27,7 +27,8 @@ import com.example.java.android1.java_android_notes.Settings;
 import com.example.java.android1.java_android_notes.data.DataNote;
 import com.example.java.android1.java_android_notes.data.DataNoteSource;
 import com.example.java.android1.java_android_notes.data.DataNoteSourceFirebase;
-import com.example.java.android1.java_android_notes.service.BottomSheetDialog;
+import com.example.java.android1.java_android_notes.dialogs.BottomSheetDialog;
+import com.example.java.android1.java_android_notes.dialogs.DialogAddFragment;
 import com.example.java.android1.java_android_notes.service.Navigation;
 import com.example.java.android1.java_android_notes.service.NotesAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,21 +39,31 @@ import java.util.Locale;
 public class ListOfNotesFragment extends Fragment {
 
     public static final String KEY_NOTE_POSITION = "NotesFragment.notesPosition";
+    private static final String KEY_BOTTOM_SHEET_DIALOG_NOTE = "ListOfNotesFragment.BottomSheetDialog.AboutNote";
+    private static final String KEY_DIALOG_ADD_NOTE = "ListOfNotesFragment.Dialog.AddNote";
 
     private boolean mIsLandScape;
     private NotesAdapter mNotesAdapter;
     private DataNoteSource mDataNoteSource;
     private int mItemIndex = -1;
     private RecyclerView mRecyclerView;
-    private int mLastSelectedPosition = -1;
     private Navigation mNavigation;
 
+    @SuppressLint("NotifyDataSetChanged")
     private final DataNoteSource.DataNoteSourceListener mChangeListener = new DataNoteSource.DataNoteSourceListener() {
         @Override
         public void onItemAdded(int index) {
             if (mNotesAdapter != null) {
                 mNotesAdapter.notifyItemInserted(index);
                 mRecyclerView.scrollToPosition(index);
+            }
+        }
+
+        @Override
+        public void onItemRemoved(int index) {
+            if (mNotesAdapter != null) {
+                mNotesAdapter.notifyItemRemoved(index);
+                mItemIndex = index - 1;
             }
         }
 
@@ -122,9 +133,8 @@ public class ListOfNotesFragment extends Fragment {
             mNavigation.addFragment(fragment, true, false, false);
         });
 
-        mNotesAdapter.setOnItemLongClickListener(position -> {
-            new BottomSheetDialog(position).show(getParentFragmentManager(), "");
-        });
+        mNotesAdapter.setOnItemLongClickListener(position -> new BottomSheetDialog(position).
+                show(getParentFragmentManager(), KEY_BOTTOM_SHEET_DIALOG_NOTE));
 
         setLayoutManager();
         mDataNoteSource.addChangesListener(mChangeListener);
@@ -181,19 +191,12 @@ public class ListOfNotesFragment extends Fragment {
 
     private void addNote(View view) {
         FloatingActionButton actionButton = view.findViewById(R.id.create_note);
-        actionButton.setOnClickListener((click) -> {
-            int position = mDataNoteSource.getDataNoteCount();
-            AddNoteFragment noteFragment = new AddNoteFragment();
-            noteFragment.setOnItemChanges(mChangeListener);
-            mNavigation.addFragment(noteFragment, true, false, false);
-            mNotesAdapter.notifyItemInserted(position);
-            mRecyclerView.scrollToPosition(position);
-        });
+        actionButton.setOnClickListener((click) -> new DialogAddFragment().show(requireActivity().
+                getSupportFragmentManager(), KEY_DIALOG_ADD_NOTE));
     }
 
     public void setLastSelectedPosition(int lastSelectedPosition) {
-        mLastSelectedPosition = lastSelectedPosition;
-        mItemIndex = mLastSelectedPosition;
+        mItemIndex = lastSelectedPosition;
     }
 
     @Override

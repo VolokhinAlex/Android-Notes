@@ -56,7 +56,13 @@ public abstract class BaseDataNoteSource implements DataNoteSource {
     public void removeItem(int position) {
         mDataNotes.remove(position);
         for (DataNoteSourceListener listener : mListeners) {
-            listener.onDataSetChanged();
+            listener.onItemRemoved(position);
+        }
+    }
+
+    protected final void notifyAdded(int index) {
+        for (DataNoteSourceListener listener : mListeners) {
+            listener.onItemAdded(index);
         }
     }
 

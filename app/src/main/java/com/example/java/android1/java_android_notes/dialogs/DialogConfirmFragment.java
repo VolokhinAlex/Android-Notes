@@ -1,4 +1,4 @@
-package com.example.java.android1.java_android_notes.service;
+package com.example.java.android1.java_android_notes.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
