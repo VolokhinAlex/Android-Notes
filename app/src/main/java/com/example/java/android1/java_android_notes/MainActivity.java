@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,28 +20,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.java.android1.java_android_notes.ui.ListOfNotesFragment;
+import com.example.java.android1.java_android_notes.ui.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
+
+    private boolean mIsDarkTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme();
         setContentView(R.layout.activity_main);
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager  = getSupportFragmentManager();
             fragmentManager.popBackStack();
         }
 
         if (savedInstanceState == null) {
-            NoteDescriptionFragment fragment = new NoteDescriptionFragment();
+            ListOfNotesFragment fragment = new ListOfNotesFragment();
             fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
-                    .replace(R.id.note_description, fragment).commit();
+            addFragment(fragment, false, true);
         }
         initView();
     }
@@ -95,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                addFragment(new SettingsFragment());
+                addFragment(new SettingsFragment(), true, false);
                 Toast.makeText(getApplicationContext(), "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.about_app:
+            case R.id.action_about_app:
                 Toast.makeText(getApplicationContext(), "ABOUT APP", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_sort:
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Fragment getVisibleFragment(FragmentManager fragmentManager) {
+    public static Fragment getVisibleFragment(FragmentManager fragmentManager) {
         List<Fragment> fragments = fragmentManager.getFragments();
         int countFragments = fragments.size();
         for (int i = countFragments - 1; i >= 0; i--) {
@@ -137,19 +140,40 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private void addFragment(Fragment fragment) {
+    private void addFragment(Fragment fragment, boolean isBackStack, boolean isFirstStart) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragmentToRemove = getVisibleFragment(fragmentManager);
-        if (fragmentToRemove != null) {
-            fragmentTransaction.remove(fragmentToRemove);
-        }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            fragmentTransaction.replace(R.id.notes_list, fragment).
-                    setReorderingAllowed(true).addToBackStack(null).commit();
+
+        boolean isPortraitOrientation =
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+
+        if (isPortraitOrientation || isFirstStart) {
+            fragmentTransaction.replace(R.id.list_of_notes_container, fragment).
+                    setReorderingAllowed(true);
         } else {
-            fragmentTransaction.replace(R.id.note_description, fragment).
-                    setReorderingAllowed(true).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.note_description_container, fragment).
+                    setReorderingAllowed(true);
+        }
+
+        if (isBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+
+        fragmentTransaction.commit();
+    }
+
+    private void readSetting() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Settings.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        mIsDarkTheme = sharedPreferences.getBoolean(Settings.KEY_IS_DARK_THEME, false);
+        boolean mIsSystemTheme = sharedPreferences.getBoolean(Settings.KEY_IS_SYSTEM_THEME, true);
+        int mTextSize = sharedPreferences.getInt(Settings.KEY_TEXT_SIZE, Settings.MEDIUM_TEXT_SIZE);
+        int mLayoutView = sharedPreferences.getInt(Settings.KEY_LAYOUT_VIEW, Settings.LINEAR_LAYOUT_VIEW);
+    }
+
+    private void setTheme() {
+        readSetting();
+        if (mIsDarkTheme) {
+           setTheme(R.style.ThemeDark);
         }
     }
 

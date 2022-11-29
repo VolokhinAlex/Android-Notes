@@ -7,7 +7,7 @@
         android:orderInCategory="5"/>
 
     <item
-        android:id="@+id/about_app"
+        android:id="@+id/action_about_app"
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/about_app"
         android:orderInCategory="5" />
