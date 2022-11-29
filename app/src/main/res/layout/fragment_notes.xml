@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/notes_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_new_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/plus"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="@dimen/margin_end_floating_btn"
+        android:layout_marginBottom="@dimen/margin_bottom_floating_btn"
+        android:contentDescription="@string/add_new_note"
+        app:borderWidth="0dp"/>
+
+</FrameLayout>

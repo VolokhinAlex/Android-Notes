@@ -20,4 +20,11 @@
         <item>03.11.2022</item>
         <item>04.11.2022</item>
     </string-array>
+
+    -
+    <string-array name="text_sizes">
+        <item>Large</item>
+        <item>Medium</item>
+        <item>Small</item>
+    </string-array>
 </resources>
