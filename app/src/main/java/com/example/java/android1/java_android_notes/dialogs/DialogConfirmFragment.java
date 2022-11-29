@@ -45,7 +45,6 @@ public class DialogConfirmFragment extends DialogFragment {
         MaterialButton btnNo = view.findViewById(R.id.confirm_dialog_no);
         MaterialButton btnYes = view.findViewById(R.id.confirm_dialog_yes);
         title.setText(mDataNote.getNoteName());
-        Log.e("TAG_CHECKER", String.valueOf(mCurrentIndex));
         AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
 
         dialog.setTitle(R.string.confirm_dialog_title);
