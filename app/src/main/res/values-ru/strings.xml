@@ -22,7 +22,7 @@
     <string name="sign_out">Выйти из аккаунта</string>
     <string name="log_out">Выйти из аккаунта</string>
     <string name="description_about_app">Приложения для заметок</string>
-    <string name="current_app_version">Текущая версия приложения</string>
+    <string name="current_app_version">Версия приложения</string>
     <string name="window_app_settings">Системные настройки приложения</string>
     <string name="sign_in">Войти в аккаунт</string>
     <string name="confirm_dialog_delete">Вы действительно хотите удалить эту заметку?</string>

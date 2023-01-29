@@ -26,7 +26,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="log_out">Log Out</string>
     <string name="description_about_app">The application for write notes</string>
-    <string name="current_app_version">Current Application Version</string>
+    <string name="current_app_version">Application Version</string>
     <string name="window_app_settings">Window App Settings</string>
     <string name="facebook_app_id" translatable="false">547166340557982</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb547166340557982</string>
