@@ -11,8 +11,8 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <item
-        android:id="@+id/action_sort"
-        android:title="@string/sort"
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
         android:orderInCategory="5"/>
 
 </menu>

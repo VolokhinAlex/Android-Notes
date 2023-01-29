@@ -3,34 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="5dp">
+    android:padding="20dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/setting_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
         android:text="@string/settings"
-        android:textSize="@dimen/title_text_size"
-        android:layout_gravity="center"/>
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_turn_on_dark_theme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/turn_on_dark_theme" />
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_turn_on_system_theme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/turn_on_system_theme"/>
+        android:textSize="@dimen/title_text_size" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/margin_settings_from_view">
+        android:layout_marginBottom="@dimen/margin_settings_from_view"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,9 +31,10 @@
             android:id="@+id/change_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/text_sizes"
             android:layout_gravity="center"
-            android:gravity="end"/>
+            android:entries="@array/text_sizes"
+            android:gravity="end"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +63,33 @@
         android:id="@+id/btn_save_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save_settings"
-        android:layout_marginTop="@dimen/margin_settings_from_view"/>
+        android:layout_marginTop="@dimen/margin_settings_from_view"
+        android:text="@string/save_settings" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_bottom_in_about_app"
+            android:text="@string/description_about_app"
+            android:textSize="@dimen/about_app_description_size" />
+
+        <TextView
+            android:id="@+id/current_app_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_bottom_in_about_app"
+            android:textSize="@dimen/current_app_version_size"
+            tools:text="Current version: 1.0v" />
+
+    </LinearLayout>
 
 </LinearLayout>

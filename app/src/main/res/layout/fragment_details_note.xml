@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/note_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/item_title"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="50dp"
+                    android:autofillHints=""
+                    android:background="@android:color/transparent"
+                    android:ellipsize="end"
+                    android:hint="@string/hint_note_title"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:textSize="@dimen/title_text_size"
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/item_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end"
+                    android:hint="@string/hint_note_date"
+                    android:textSize="@dimen/note_date_text_size" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/item_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:hint="@string/hint_note_text"
+                android:inputType="textMultiLine"
+                android:textSize="@dimen/note_text_size"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/save_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="@dimen/margin_end_floating_btn"
+        android:layout_marginBottom="@dimen/margin_bottom_floating_btn"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/edit_note"
+        android:src="@android:drawable/ic_menu_save"
+        app:borderWidth="0dp" />
+
+</FrameLayout>
