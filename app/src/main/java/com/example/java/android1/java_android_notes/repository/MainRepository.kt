@@ -9,9 +9,11 @@ interface MainRepository {
 
     fun getAllFavorites(): LiveData<List<NoteEntity>>
 
-    suspend fun upsertNote(dataNote: DataNote)
+    suspend fun insertNote(dataNote: DataNote)
 
-    suspend fun removeNote(dataNote: DataNote)
+    suspend fun updateNote(dataNote: DataNote)
+
+    suspend fun deleteNote(dataNote: DataNote)
 
     fun getNotesByQuery(text: String): LiveData<List<NoteEntity>>
 }

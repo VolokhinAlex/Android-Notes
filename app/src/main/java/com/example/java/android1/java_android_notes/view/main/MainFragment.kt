@@ -49,14 +49,14 @@ class MainFragment : Fragment() {
     private var notesListData: List<DataNote> = listOf()
 
     private fun openSheetDialog(dataNote: DataNote) {
-        BottomSheetDialog(dataNote = dataNote) { mainViewModel.removeNote(it) }.show(
+        BottomSheetDialog(dataNote = dataNote) { mainViewModel.deleteNote(it) }.show(
             parentFragmentManager,
             ""
         )
     }
 
     private fun updateFavoriteValueNote(dataNote: DataNote, isChecked: Boolean) {
-        mainViewModel.upsertNote(
+        mainViewModel.update(
             DataNote(
                 id = dataNote.id,
                 noteTitle = dataNote.noteTitle,
@@ -82,7 +82,7 @@ class MainFragment : Fragment() {
         }
         binding.createNote.setOnClickListener {
             DialogAddFragment(onEventListener = {
-                mainViewModel.upsertNote(it)
+                mainViewModel.insert(it)
             }).show(requireActivity().supportFragmentManager, "")
         }
         return binding.root

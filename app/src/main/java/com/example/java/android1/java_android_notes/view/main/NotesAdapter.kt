@@ -3,7 +3,6 @@ package com.example.java.android1.java_android_notes.view.main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.java.android1.java_android_notes.databinding.NoteItemBinding
 import com.example.java.android1.java_android_notes.model.DataNote
@@ -14,12 +13,11 @@ class NotesAdapter(
     private val onCheckedChangeListener: (DataNote, Boolean) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val notesData: MutableList<DataNote> = mutableListOf()
+    private var notesData: List<DataNote> = listOf()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setNotesList(notes: List<DataNote>) {
-        notesData.clear()
-        notesData.addAll(notes)
+        notesData = notes
         notifyDataSetChanged()
     }
 

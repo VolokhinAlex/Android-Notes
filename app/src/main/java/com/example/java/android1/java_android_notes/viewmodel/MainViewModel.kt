@@ -21,15 +21,17 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     private fun getAllNotes() = repository.getAllNotes()
 
-    fun upsertNote(dataNote: DataNote) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.upsertNote(dataNote)
-        }
+    fun insert(dataNote: DataNote) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertNote(dataNote)
     }
 
-    fun removeNote(dataNote: DataNote) {
+    fun update(dataNote: DataNote) = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateNote(dataNote)
+    }
+
+    fun deleteNote(dataNote: DataNote) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.removeNote(dataNote)
+            repository.deleteNote(dataNote)
         }
     }
 

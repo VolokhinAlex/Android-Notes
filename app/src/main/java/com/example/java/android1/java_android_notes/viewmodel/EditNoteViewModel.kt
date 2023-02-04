@@ -14,7 +14,7 @@ class EditNoteViewModel(private val repository: DetailsRepository) : ViewModel()
 
     fun upsertNote(dataNote: DataNote) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.upsertNote(dataNote)
+            repository.updateNote(dataNote)
         }
     }
 

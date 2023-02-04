@@ -5,17 +5,23 @@ import androidx.room.*
 
 @Dao
 interface NotesDao {
-    @Upsert
-    fun upsert(note: NoteEntity)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(note: NoteEntity)
 
     @Query("SELECT * FROM notes_table")
     fun getAllNotes(): LiveData<List<NoteEntity>>
 
+    @Update
+    fun update(note: NoteEntity)
+
     @Query("SELECT * FROM notes_table WHERE note_favorite = 1")
     fun getAllFavorites(): LiveData<List<NoteEntity>>
 
-    @Query("SELECT * FROM notes_table WHERE LOWER(note_title) LIKE '%' || :text || '%' " +
-            "OR LOWER(note_description) LIKE '%' || :text || '%'")
+    @Query(
+        "SELECT * FROM notes_table WHERE LOWER(note_title) LIKE '%' || :text || '%' " +
+                "OR LOWER(note_description) LIKE '%' || :text || '%'"
+    )
     fun getNotesByQuery(text: String): LiveData<List<NoteEntity>>
 
     @Delete

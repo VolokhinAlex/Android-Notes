@@ -16,12 +16,17 @@ class MainRepositoryImpl(private val dao: NotesDao) : MainRepository {
         dao.getAllFavorites()
 
     @WorkerThread
-    override suspend fun upsertNote(dataNote: DataNote) {
-        dao.upsert(note = convertDataNoteToNoteEntity(dataNote = dataNote))
+    override suspend fun insertNote(dataNote: DataNote) {
+        dao.insert(convertDataNoteToNoteEntity(dataNote))
     }
 
     @WorkerThread
-    override suspend fun removeNote(dataNote: DataNote) {
+    override suspend fun updateNote(dataNote: DataNote) {
+        dao.update(convertDataNoteToNoteEntity(dataNote))
+    }
+
+    @WorkerThread
+    override suspend fun deleteNote(dataNote: DataNote) {
         dao.delete(note = convertDataNoteToNoteEntity(dataNote = dataNote))
     }
 
